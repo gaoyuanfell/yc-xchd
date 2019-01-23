@@ -1,12 +1,11 @@
 <moka-header class="moka-header">1</moka-header>
-
-<mat-drawer-container>
-  <mat-drawer mode="side" opened>
+<mat-sidenav-container>
+  <mat-sidenav mode="side" opened #drawer>
     <moka-sidenav class="moka-sidenav">2</moka-sidenav>
-  </mat-drawer>
-  <mat-drawer-content>
-    <moka-content class="moka-content">3</moka-content>
-  </mat-drawer-content>
-</mat-drawer-container>
-
-
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <moka-content class="moka-content">
+      <div mat-button (click)="drawer.toggle();test(drawer)">Toggle drawer</div>
+    </moka-content>
+  </mat-sidenav-content>
+</mat-sidenav-container>

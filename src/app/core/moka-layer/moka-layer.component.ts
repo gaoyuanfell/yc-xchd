@@ -13,4 +13,9 @@ export class MokaLayerComponent implements OnInit {
   ngOnInit() {
   }
 
+  test(data){
+    console.info(data);
+    console.info(data.toggle);
+  }
+
 }
