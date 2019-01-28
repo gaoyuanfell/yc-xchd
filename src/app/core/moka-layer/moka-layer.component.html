@@ -1,11 +1,29 @@
-<moka-header class="moka-header">1</moka-header>
+<moka-header class="moka-header">
+
+  <mat-toolbar>
+    <mat-toolbar-row>
+      <h1>佛光普照</h1>
+    </mat-toolbar-row>
+  </mat-toolbar>
+
+</moka-header>
 <mat-sidenav-container>
   <mat-sidenav mode="side" opened #drawer>
-    <moka-sidenav class="moka-sidenav">2</moka-sidenav>
+    <moka-sidenav class="moka-sidenav">
+
+
+
+    </moka-sidenav>
   </mat-sidenav>
   <mat-sidenav-content>
     <moka-content class="moka-content">
+
       <div mat-button (click)="drawer.toggle();test(drawer)">Toggle drawer</div>
+
+      <a mat-button [routerLink]="[ '/index']">index</a>
+
+      <router-outlet></router-outlet>
+
     </moka-content>
   </mat-sidenav-content>
 </mat-sidenav-container>

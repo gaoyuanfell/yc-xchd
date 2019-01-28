@@ -1,13 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { MokaLayerComponent } from './moka-layer/moka-layer.component';
-import { rootRoutes } from '../app-routing.module';
+import { LoginComponent } from './login.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: MokaLayerComponent,
-    children: rootRoutes
+    component: LoginComponent
   }
 ];
 
@@ -15,4 +13,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class CoreRoutingModule { }
+export class LoginRoutingModule { }
