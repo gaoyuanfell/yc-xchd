@@ -1,0 +1,8 @@
+<ul>
+  <ng-template ngFor [ngForOf]="list" let-item let-index="index">
+    <li>
+      {{item[useProps.name]}}
+      <moka-menu *ngIf="item[useProps.child]?.length" [list]="item[useProps.child]" [props]="props"></moka-menu>
+    </li>
+  </ng-template>
+</ul>

@@ -6,6 +6,7 @@ import { MokaHeaderComponent } from './moka-header/moka-header.component';
 import { MokaSidenavComponent } from './moka-sidenav/moka-sidenav.component';
 import { MokaContentComponent } from './moka-content/moka-content.component';
 import { BaseModule } from '../base-module';
+import { MokaMenuComponent } from './moka-menu/moka-menu.component';
 
 @NgModule({
   declarations: [
@@ -13,6 +14,7 @@ import { BaseModule } from '../base-module';
     MokaHeaderComponent,
     MokaSidenavComponent,
     MokaContentComponent,
+    MokaMenuComponent,
   ],
   imports: [
     CommonModule,
