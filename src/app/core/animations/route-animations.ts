@@ -69,7 +69,7 @@ const _bounceInLeftAnimation = [
         animate(
           "225ms cubic-bezier(0.4,0.0,0.2,1)",
           style({
-            transform: "translateX(-100%)"
+            transform: "translateX(-100%)",
           })
         )
       ],
