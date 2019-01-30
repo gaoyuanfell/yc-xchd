@@ -1,5 +1,4 @@
 <moka-header class="moka-header">
-
   <mat-toolbar>
     <mat-toolbar-row>
       <h1>佛光普照</h1>
@@ -11,18 +10,21 @@
   <mat-sidenav mode="side" opened #drawer>
     <moka-sidenav class="moka-sidenav">
 
-        <moka-menu [list]="menuList" [props]="{icon:'leftIcon',route:'href', child:'children', name:'name'}"></moka-menu>
+      <moka-menu-accordion>
+        <moka-menu [expanded]="true" [list]="menuList" [props]="{icon:'leftIcon',route:'href', child:'children', name:'name'}"></moka-menu>
+      </moka-menu-accordion>
 
     </moka-sidenav>
   </mat-sidenav>
   <mat-sidenav-content>
     <moka-content class="moka-content">
 
-      <div mat-button (click)="drawer.toggle();test(drawer)">Toggle drawer</div>
-
-      <a mat-button [routerLink]="[ '/index']">index</a>
-
-      <router-outlet></router-outlet>
+      <!-- <moka-bounce-in-right [outlet]="outlet">
+        <router-outlet #outlet="outlet"></router-outlet>
+      </moka-bounce-in-right> -->
+      <moka-bounce-in-left [outlet]="outlet">
+        <router-outlet #outlet="outlet"></router-outlet>
+      </moka-bounce-in-left>
 
     </moka-content>
   </mat-sidenav-content>

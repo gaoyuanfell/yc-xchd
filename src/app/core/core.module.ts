@@ -5,8 +5,12 @@ import { MokaLayerComponent } from './moka-layer/moka-layer.component';
 import { MokaHeaderComponent } from './moka-header/moka-header.component';
 import { MokaSidenavComponent } from './moka-sidenav/moka-sidenav.component';
 import { MokaContentComponent } from './moka-content/moka-content.component';
-import { BaseModule } from '../base-module';
 import { MokaMenuComponent } from './moka-menu/moka-menu.component';
+import { MokaMenuAccordionComponent } from './moka-menu/moka-menu-accordion.component';
+import { BounceInRightComponent } from './prepare-route/bounce-in-right.component';
+import { MokaModalComponent } from './moka-modal/moka-modal.component';
+import { MatModule } from '../mat-module';
+import { BounceInLeftComponent } from './prepare-route/bounce-in-left.component';
 
 @NgModule({
   declarations: [
@@ -15,11 +19,21 @@ import { MokaMenuComponent } from './moka-menu/moka-menu.component';
     MokaSidenavComponent,
     MokaContentComponent,
     MokaMenuComponent,
+    MokaMenuAccordionComponent,
+
+    MokaModalComponent,
+    BounceInRightComponent,
+    BounceInLeftComponent,
   ],
   imports: [
     CommonModule,
     CoreRoutingModule,
-    BaseModule,
+    MatModule,
+  ],
+  exports:[
+    MokaModalComponent,
+    BounceInRightComponent,
+    BounceInLeftComponent,
   ]
 })
 export class CoreModule { }
