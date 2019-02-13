@@ -42,25 +42,17 @@ export class PinDirective implements OnInit, OnDestroy, AfterContentInit {
   }
   private _direction: 'top' | 'bottom' = 'top';
 
-
-
   constructor( @Host() @Optional() private _mokaScrollComponent: MokaScrollComponent, private ref: ElementRef, private renderer:Renderer2 ) {
 
   }
 
   ngAfterContentInit() {
-
-    let offsetWidth = (<HTMLDivElement>this.ref.nativeElement).offsetWidth
     setTimeout(() => {
-      let bcrt = this.bcrt = (<HTMLDivElement>this._mokaScrollComponent.ref.nativeElement).getBoundingClientRect();
-      // console.info(bcrt);
-
+      this.bcrt = (<HTMLDivElement>this._mokaScrollComponent.ref.nativeElement).getBoundingClientRect();
       let bcrt2 = this.bcrt2 = (<HTMLDivElement>this.ref.nativeElement).getBoundingClientRect();
-      // console.info(bcrt2);
       this.renderer.setStyle(this.ref.nativeElement, 'width', `${bcrt2.width}px`)
       this.renderer.setStyle(this.ref.nativeElement, 'height', `${bcrt2.height}px`);
     }, 0);
-
     fromEvent(this._mokaScrollComponent.ref.nativeElement, 'scroll').subscribe(this.scrollEvent.bind(this))
   }
 
@@ -82,44 +74,47 @@ export class PinDirective implements OnInit, OnDestroy, AfterContentInit {
   }
 
   bottom(target){
-    console.info(this.bcrt);
-    console.info(this.bcrt2);
-    console.info(this.bcrt2.bottom - target.scrollTop - this.bcrt.height);
+    let bottom = 0;
+    if(this.attach){
+      let asd = this.attach.getBoundingClientRect()
+      bottom = this.bcrt.bottom - asd.bottom + asd.height
+    }
 
-    // let bottom = 0;
-    // if(this.attach){
-    //   let asd = this.attach.getBoundingClientRect()
-    //   bottom = asd.bottom - this.bcrt.bottom + asd.height
-    // }
-
-    // if((this.bcrt2.bottom - target.scrollTop - this.bcrt.height) > 0){
-    //   if(this.ref.nativeElement.nodeName == 'TR'){
-    //     Array.from(this.ref.nativeElement.children).forEach((ele)=> {
-    //       this.renderer.setStyle(ele, 'position', `sticky`);
-    //       this.renderer.setStyle(ele, 'bottom', `${bottom}px`);
-    //       this.renderer.setStyle(ele, 'z-index', `2`);
-    //     })
-    //     return;
-    //   }
-
-    //   this.renderer.setStyle(this.ref.nativeElement, 'position', `absolute`);
-    //   this.renderer.setStyle(this.ref.nativeElement, 'bottom', `${bottom}px`);
-    //   this.renderer.setStyle(this.ref.nativeElement, 'z-index', `1`);
-    //   if(!this.div){
-    //     this.div = document.createElement('div');
-    //     this.renderer.setStyle(this.div, 'width', `${this.bcrt2.width}px`);
-    //     this.renderer.setStyle(this.div, 'height', `${this.bcrt2.height}px`);
-    //     (<HTMLDivElement>this.ref.nativeElement).parentNode.insertBefore(this.div, this.ref.nativeElement)
-    //   }
-    // }else{
-    //   this.renderer.removeStyle(this.ref.nativeElement, 'position')
-    //   this.renderer.removeStyle(this.ref.nativeElement, 'bottom')
-    //   this.renderer.removeStyle(this.ref.nativeElement, 'z-index')
-    //   if(this.div){
-    //     (<HTMLDivElement>this.ref.nativeElement).parentNode.removeChild(this.div)
-    //     this.div = null;
-    //   }
-    // }
+    if((this.bcrt2.bottom - this.bcrt.bottom - target.scrollTop + bottom) > 0){
+      if(this.ref.nativeElement.nodeName == 'TR'){
+        Array.from(this.ref.nativeElement.children).forEach((ele)=> {
+          this.renderer.setStyle(ele, 'position', `sticky`);
+          this.renderer.setStyle(ele, 'bottom', `${bottom}px`);
+          this.renderer.setStyle(ele, 'z-index', `2`);
+        })
+        return;
+      }
+      this.renderer.setStyle(this.ref.nativeElement, 'position', `absolute`);
+      this.renderer.setStyle(this.ref.nativeElement, 'bottom', `${bottom}px`);
+      this.renderer.setStyle(this.ref.nativeElement, 'z-index', `1`);
+      if(!this.div){
+        this.div = document.createElement('div');
+        this.renderer.setStyle(this.div, 'width', `${this.bcrt2.width}px`);
+        this.renderer.setStyle(this.div, 'height', `${this.bcrt2.height}px`);
+        (<HTMLDivElement>this.ref.nativeElement).parentNode.insertBefore(this.div, this.ref.nativeElement)
+      }
+    }else{
+      if(this.ref.nativeElement.nodeName == 'TR'){
+        Array.from(this.ref.nativeElement.children).forEach((ele)=> {
+          this.renderer.removeStyle(ele, 'position');
+          this.renderer.removeStyle(ele, 'bottom');
+          this.renderer.removeStyle(ele, 'z-index');
+        })
+        return;
+      }
+      this.renderer.removeStyle(this.ref.nativeElement, 'position')
+      this.renderer.removeStyle(this.ref.nativeElement, 'bottom')
+      this.renderer.removeStyle(this.ref.nativeElement, 'z-index')
+      if(this.div){
+        (<HTMLDivElement>this.ref.nativeElement).parentNode.removeChild(this.div)
+        this.div = null;
+      }
+    }
   }
 
   top(target){
@@ -128,8 +123,6 @@ export class PinDirective implements OnInit, OnDestroy, AfterContentInit {
       let asd = this.attach.getBoundingClientRect()
       top = asd.top - this.bcrt.top + asd.height
     }
-
-    // console.info(this.bcrt2.top - this.bcrt.top - target.scrollTop)
 
     if((this.bcrt2.top - this.bcrt.top - target.scrollTop - top) < 0){
       if(this.ref.nativeElement.nodeName == 'TR'){
@@ -151,6 +144,14 @@ export class PinDirective implements OnInit, OnDestroy, AfterContentInit {
         (<HTMLDivElement>this.ref.nativeElement).parentNode.insertBefore(this.div, this.ref.nativeElement)
       }
     }else{
+      if(this.ref.nativeElement.nodeName == 'TR'){
+        Array.from(this.ref.nativeElement.children).forEach((ele)=> {
+          this.renderer.removeStyle(ele, 'position');
+          this.renderer.removeStyle(ele, 'bottom');
+          this.renderer.removeStyle(ele, 'z-index');
+        })
+        return;
+      }
       this.renderer.removeStyle(this.ref.nativeElement, 'position')
       this.renderer.removeStyle(this.ref.nativeElement, 'top')
       this.renderer.removeStyle(this.ref.nativeElement, 'z-index')

@@ -1,5 +1,4 @@
 <moka-scroll>
-  <moka-modal>
 
     <div class="query-tool">
       <div class="left-tool">
@@ -64,7 +63,7 @@
 
     <table class="mat-table" matSort (matSortChange)="sortData($event)">
       <thead>
-        <tr class="mat-header-row" pin [attach]="asdasd">
+        <tr class="mat-header-row">
           <th class="mat-header-cell">
             <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
               [indeterminate]="selection.hasValue() && !isAllSelected()">
@@ -91,7 +90,7 @@
         </tr>
       </tbody>
       <tfoot>
-        <tr class="mat-footer-row" pin [direction]="'bottom'">
+        <tr class="mat-footer-row" pin [direction]="'bottom'" [attach]="zxc">
           <td class="mat-footer-cell"> </td>
           <td class="mat-footer-cell"> Total </td>
           <td class="mat-footer-cell"> </td>
@@ -100,12 +99,8 @@
           <td class="mat-footer-cell"> 100 </td>
         </tr>
       </tfoot>
-
     </table>
-
-    <div pin [direction]="'bottom'">
+    <div pin [direction]="'bottom'" #zxc>
       <mat-paginator [pageSizeOptions]="[5, 10, 20, 50, 100]" [pageSize]="20" [pageIndex]="0" [length]="100" showFirstLastButtons (page)="page($event)"></mat-paginator>
     </div>
-
-  </moka-modal>
 </moka-scroll>

@@ -73,7 +73,7 @@ export class TableComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
   sortData(sort: Sort) {
-    console.info(sort);
+    
   }
 
   page(page: PageEvent) {
