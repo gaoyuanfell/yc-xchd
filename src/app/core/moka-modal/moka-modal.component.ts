@@ -11,7 +11,8 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
     `
       .moka-modal{
         display: block;
-        height: 100%;
+        padding: 5px 30px 30px;
+        background: #fff;
       }
     `
   ]

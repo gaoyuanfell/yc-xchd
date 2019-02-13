@@ -1,112 +1,94 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator, MatTableDataSource, MatSort, Sort, PageEvent } from '@angular/material';
-import { SelectionModel } from '@angular/cdk/collections';
+import { Component, OnInit, ViewChild } from "@angular/core";
+import {
+  MatPaginator,
+  MatTableDataSource,
+  MatSort,
+  Sort,
+  PageEvent
+} from "@angular/material";
+import { SelectionModel } from "@angular/cdk/collections";
+import { AutoCookie } from '../core/decorator/decorator';
 
-export interface PeriodicElement {
+export interface Dessert {
+  calories: number;
+  carbs: number;
+  fat: number;
   name: string;
-  position: number;
-  weight: number;
-  symbol: string;
+  protein: number;
 }
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-];
+export interface Food {
+  value: string;
+  viewValue: string;
+}
 
 @Component({
-  selector: 'app-table',
-  templateUrl: './table.component.html',
-  styleUrls: ['./table.component.less']
+  selector: "app-table",
+  templateUrl: "./table.component.html",
+  styleUrls: ["./table.component.less"]
 })
 export class TableComponent implements OnInit {
 
-  displayedColumns: string[] = ['select', 'position', 'name', 'weight', 'symbol'];
-  // dataSource = ELEMENT_DATA;
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  @AutoCookie()
+  query
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
-  selection = new SelectionModel<PeriodicElement>(true, []);
+  desserts: Dessert[] = [
+    {name: 'Frozen yogurt', calories: 159, fat: 6, carbs: 24, protein: 4},
+    {name: 'Ice cream sandwich', calories: 237, fat: 9, carbs: 37, protein: 4},
+    {name: 'Eclair', calories: 262, fat: 16, carbs: 24, protein: 6},
+    {name: 'Cupcake', calories: 305, fat: 4, carbs: 67, protein: 4},
+    {name: 'Gingerbread', calories: 356, fat: 16, carbs: 49, protein: 4},
+    {name: 'Frozen yogurt', calories: 159, fat: 6, carbs: 24, protein: 4},
+    {name: 'Ice cream sandwich', calories: 237, fat: 9, carbs: 37, protein: 4},
+    {name: 'Eclair', calories: 262, fat: 16, carbs: 24, protein: 6},
+    {name: 'Cupcake', calories: 305, fat: 4, carbs: 67, protein: 4},
+    {name: 'Gingerbread', calories: 356, fat: 16, carbs: 49, protein: 4},
+    {name: 'Frozen yogurt', calories: 159, fat: 6, carbs: 24, protein: 4},
+    {name: 'Ice cream sandwich', calories: 237, fat: 9, carbs: 37, protein: 4},
+    {name: 'Eclair', calories: 262, fat: 16, carbs: 24, protein: 6},
+    {name: 'Cupcake', calories: 305, fat: 4, carbs: 67, protein: 4},
+    {name: 'Gingerbread', calories: 356, fat: 16, carbs: 49, protein: 4},
+    {name: 'Frozen yogurt', calories: 159, fat: 6, carbs: 24, protein: 4},
+    {name: 'Ice cream sandwich', calories: 237, fat: 9, carbs: 37, protein: 4},
+    {name: 'Eclair', calories: 262, fat: 16, carbs: 24, protein: 6},
+    {name: 'Cupcake', calories: 305, fat: 4, carbs: 67, protein: 4},
+    {name: 'Gingerbread', calories: 356, fat: 16, carbs: 49, protein: 4},
+  ];
+
+  selection = new SelectionModel<Dessert>(true, []);
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
+    const numRows = this.desserts.length;
     return numSelected === numRows;
   }
 
-  /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
-    this.isAllSelected() ?
-        this.selection.clear() :
-        this.dataSource.data.forEach(row => this.selection.select(row));
+    this.isAllSelected()
+      ? this.selection.clear()
+      : this.desserts.forEach(row => this.selection.select(row));
   }
 
-  getTotalCost() {
-    return this.dataSource.data.map(t => t.weight).reduce((acc, value) => acc + value, 0);
-  }
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
-  sortData(sort: Sort){
+  sortData(sort: Sort) {
     console.info(sort);
   }
 
-  page(page: PageEvent){
-    console.info(page)
+  page(page: PageEvent) {
+    console.info(page);
   }
 
-  constructor() { }
+  foods: Food[] = [
+    {value: 'steak-0', viewValue: 'Steak'},
+    {value: 'pizza-1', viewValue: 'Pizza'},
+    {value: 'tacos-2', viewValue: 'Tacos'}
+  ];
+
+  constructor() {}
 
   ngOnInit() {
-    // this.dataSource.paginator = this.paginator; // 采用内置分页功能
-    // this.dataSource.sort = this.sort; // 采用内置排序
-  }
 
+  }
 }

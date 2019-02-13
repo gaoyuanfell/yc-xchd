@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'moka-scroll',
@@ -19,7 +19,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 })
 export class MokaScrollComponent implements OnInit {
 
-  constructor() { }
+  constructor(public ref: ElementRef) { }
 
   ngOnInit() {
   }

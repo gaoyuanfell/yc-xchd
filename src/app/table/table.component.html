@@ -1,64 +1,111 @@
-<moka-modal>
-  <moka-scroll>
+<moka-scroll>
+  <moka-modal>
 
-    <mat-card>Simple card</mat-card>
+    <div class="query-tool">
+      <div class="left-tool">
+        <h2>标题</h2>
+      </div>
+      <div class="right-tool">
 
-    <div style="position: relative;">
-        <table mat-table matSort [dataSource]="dataSource" (matSortChange)="sortData($event)">
+        <mat-slide-toggle [(ngModel)]="query.test3">Slide me! {{query.test3}}</mat-slide-toggle>
 
-            <ng-container matColumnDef="select">
-              <th mat-header-cell *matHeaderCellDef>
-                <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
-                  [indeterminate]="selection.hasValue() && !isAllSelected()">
-                </mat-checkbox>
-              </th>
-              <td mat-cell *matCellDef="let row">
-                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
-                </mat-checkbox>
-              </td>
-              <td mat-footer-cell *matFooterCellDef> Total </td>
-            </ng-container>
-            <!--- Note that these columns can be defined in any order.
-                      The actual rendered columns are set as a property on the row definition" -->
+        <button mat-stroked-button [matMenuTriggerFor]="animals">Menu ===</button>
 
-            <!-- Position Column -->
-            <ng-container matColumnDef="position" sticky>
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
-              <td mat-cell *matCellDef="let element"> {{element.position}} </td>
-              <td mat-footer-cell *matFooterCellDef></td>
-            </ng-container>
+        <mat-menu #animals="matMenu">
+          <button mat-menu-item>Vertebrates</button>
+          <button mat-menu-item>Invertebrates</button>
+        </mat-menu>
 
-            <!-- Name Column -->
-            <ng-container matColumnDef="name">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-              <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-              <td mat-footer-cell *matFooterCellDef></td>
-            </ng-container>
-
-            <!-- Weight Column -->
-            <ng-container matColumnDef="weight">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Weight </th>
-              <td mat-cell *matCellDef="let element"> {{element.weight | currency}} </td>
-              <td mat-footer-cell *matFooterCellDef> {{getTotalCost() | currency}} </td>
-            </ng-container>
-
-            <!-- Symbol Column -->
-            <ng-container matColumnDef="symbol" stickyEnd>
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Symbol </th>
-              <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
-              <td mat-footer-cell *matFooterCellDef></td>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-            <!-- <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr> -->
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)"></tr>
-            <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
-          </table>
-
-          <mat-paginator [pageSizeOptions]="[5, 10, 20, 50, 100]" [pageSize]="20" [pageIndex]="0" [length]="100" showFirstLastButtons (page)="page($event)"></mat-paginator>
-
+        <button mat-stroked-button>Basic</button>
+        <button mat-stroked-button color="primary">Primary</button>
+        <button mat-stroked-button color="accent">Accent</button>
+        <button mat-stroked-button color="warn">Warn</button>
+      </div>
     </div>
 
+    <div class="query-tool" pin #asdasd>
+      <div class="left-tool">
+        <mat-form-field>
+          <mat-select placeholder="Toppings" multiple>
+            <mat-option [value]="'topping'">topping</mat-option>
+            <mat-option [value]="'Extra cheese'">Extra cheese</mat-option>
+            <mat-option [value]="'Mushroom'">Mushroom</mat-option>
+            <mat-option [value]="'Onion'">Onion</mat-option>
+            <mat-option [value]="'Pepperoni'">Pepperoni</mat-option>
+            <mat-option [value]="'Sausage'">Sausage</mat-option>
+            <mat-option [value]="'Tomato'">Tomato</mat-option>
+          </mat-select>
+        </mat-form-field>
 
-  </moka-scroll>
-</moka-modal>
+        <mat-form-field>
+          <mat-select placeholder="Favorite food" [(ngModel)]="query.test1" name="test1">
+            <mat-option *ngFor="let food of foods" [value]="food.value">
+              {{food.viewValue}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </div>
+      <div class="right-tool">
+
+        <mat-form-field class="example-full-width">
+          <input matInput [matDatepicker]="picker" (click)="picker.open()" placeholder="Choose a date">
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="Favorite food" [(ngModel)]="query.test2" name="test2">
+          <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="query.test2 = ''">
+            <mat-icon>X</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <table class="mat-table" matSort (matSortChange)="sortData($event)">
+      <thead>
+        <tr class="mat-header-row" pin [attach]="asdasd">
+          <th class="mat-header-cell">
+            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+              [indeterminate]="selection.hasValue() && !isAllSelected()">
+            </mat-checkbox>
+          </th>
+          <th class="mat-header-cell" mat-sort-header="name">Dessert (100g)</th>
+          <th class="mat-header-cell" mat-sort-header="calories">Calories</th>
+          <th class="mat-header-cell" mat-sort-header="fat">Fat (g)</th>
+          <th class="mat-header-cell" mat-sort-header="carbs">Carbs (g)</th>
+          <th class="mat-header-cell" mat-sort-header="protein">Protein (g) 11111111111111</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="mat-row" *ngFor="let dessert of desserts">
+          <td class="mat-cell">
+            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(dessert) : null"
+              [checked]="selection.isSelected(dessert)"> </mat-checkbox>
+          </td>
+          <td class="mat-cell">{{dessert.name}}</td>
+          <td class="mat-cell">{{dessert.calories}}</td>
+          <td class="mat-cell">{{dessert.fat}}</td>
+          <td class="mat-cell">{{dessert.carbs}}</td>
+          <td class="mat-cell">{{dessert.protein}}</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr class="mat-footer-row" pin [direction]="'bottom'">
+          <td class="mat-footer-cell"> </td>
+          <td class="mat-footer-cell"> Total </td>
+          <td class="mat-footer-cell"> </td>
+          <td class="mat-footer-cell"> </td>
+          <td class="mat-footer-cell"> </td>
+          <td class="mat-footer-cell"> 100 </td>
+        </tr>
+      </tfoot>
+
+    </table>
+
+    <div pin [direction]="'bottom'">
+      <mat-paginator [pageSizeOptions]="[5, 10, 20, 50, 100]" [pageSize]="20" [pageIndex]="0" [length]="100" showFirstLastButtons (page)="page($event)"></mat-paginator>
+    </div>
+
+  </moka-modal>
+</moka-scroll>
