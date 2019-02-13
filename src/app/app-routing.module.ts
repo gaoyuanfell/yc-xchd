@@ -11,6 +11,11 @@ export const routes: Routes = [
     path: 'home',
     loadChildren : 'src/app/home/home.module#HomeModule',
     data: { animation: "HomeModule" },
+  },
+  {
+    path: 'table',
+    loadChildren : 'src/app/table/table.module#TableModule',
+    data: { animation: "TableModule" },
   }
 ];
 

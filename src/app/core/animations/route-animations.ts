@@ -13,7 +13,7 @@ const animationContentClass = "moka-modal";
 const _bounceInRightAnimation = [
   query(
     `:enter ${animationContentClass}`,
-    [style({ transform: "translateX(-100%)" })],
+    [style({ transform: "translateX(-100%)", opacity: 0, })],
     {
       optional: true,
       limit: 1
@@ -22,12 +22,12 @@ const _bounceInRightAnimation = [
   group([
     query(
       `:enter ${animationContentClass}`,
-      [animate("225ms cubic-bezier(0.4,0.0,0.2,1)", style({ transform: "translateX(0%)" }))],
+      [animate("225ms cubic-bezier(0.4,0.0,0.2,1)", style({ transform: "translateX(0%)", opacity: 1, }))],
       { optional: true, limit: 1 }
     ),
     query(
       `:leave ${animationContentClass}`,
-      [animate("225ms cubic-bezier(0.4,0.0,0.2,1)", style({ transform: "translateX(100%)" }))],
+      [animate("225ms cubic-bezier(0.4,0.0,0.2,1)", style({ transform: "translateX(100%)", opacity: 0, }))],
       { optional: true, limit: 1 }
     )
   ])
@@ -42,7 +42,8 @@ const _bounceInLeftAnimation = [
     `:enter ${animationContentClass}`,
     [
       style({
-        transform: "translateX(100%)"
+        transform: "translateX(100%)",
+        opacity: 0,
       })
     ],
     {
@@ -57,7 +58,8 @@ const _bounceInLeftAnimation = [
         animate(
           "225ms cubic-bezier(0.4,0.0,0.2,1)",
           style({
-            transform: "translateX(0%)"
+            transform: "translateX(0%)",
+            opacity: 1,
           })
         )
       ],
@@ -70,6 +72,7 @@ const _bounceInLeftAnimation = [
           "225ms cubic-bezier(0.4,0.0,0.2,1)",
           style({
             transform: "translateX(-100%)",
+            opacity: 0,
           })
         )
       ],
@@ -82,4 +85,51 @@ const _bounceInLeft = transition(`* <=> *`, _bounceInLeftAnimation);
 
 export const bounceInLeft = trigger("bounceInLeft", [
   _bounceInLeft
+]);
+
+const _fadeInOutAnimation = [
+  query(
+    `:enter ${animationContentClass}`,
+    [
+      style({
+        opacity: 0,
+      })
+    ],
+    {
+      optional: true,
+      limit: 1
+    }
+  ),
+  group([
+    query(
+      `:enter ${animationContentClass}`,
+      [
+        animate(
+          "225ms cubic-bezier(0.4,0.0,0.2,1)",
+          style({
+            opacity: 1,
+          })
+        )
+      ],
+      { optional: true, limit: 1 }
+    ),
+    query(
+      `:leave ${animationContentClass}`,
+      [
+        animate(
+          "225ms cubic-bezier(0.4,0.0,0.2,1)",
+          style({
+            opacity: 0,
+          })
+        )
+      ],
+      { optional: true, limit: 1 }
+    )
+  ])
+];
+
+const _fadeInOut = transition(`* <=> *`, _fadeInOutAnimation);
+
+export const fadeInOut = trigger("fadeInOut", [
+  _fadeInOut
 ]);

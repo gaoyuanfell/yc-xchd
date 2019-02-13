@@ -11,6 +11,8 @@ import { BounceInRightComponent } from './prepare-route/bounce-in-right.componen
 import { MokaModalComponent } from './moka-modal/moka-modal.component';
 import { MatModule } from '../mat-module';
 import { BounceInLeftComponent } from './prepare-route/bounce-in-left.component';
+import { MokaScrollComponent } from './moka-scroll/moka-scroll.component';
+import { FadeInOutComponent } from './prepare-route/fade-in-out.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,8 @@ import { BounceInLeftComponent } from './prepare-route/bounce-in-left.component'
     MokaMenuAccordionComponent,
 
     MokaModalComponent,
+    MokaScrollComponent,
+    FadeInOutComponent,
     BounceInRightComponent,
     BounceInLeftComponent,
   ],
@@ -32,6 +36,8 @@ import { BounceInLeftComponent } from './prepare-route/bounce-in-left.component'
   ],
   exports:[
     MokaModalComponent,
+    MokaScrollComponent,
+    FadeInOutComponent,
     BounceInRightComponent,
     BounceInLeftComponent,
   ]

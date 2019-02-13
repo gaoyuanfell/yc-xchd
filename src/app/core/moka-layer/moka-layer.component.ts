@@ -19,6 +19,10 @@ export class MokaLayerComponent implements OnInit {
         {
           name: "首页2",
           href: "home"
+        },
+        {
+          name: "表格",
+          href: "table"
         }
       ]
     },
