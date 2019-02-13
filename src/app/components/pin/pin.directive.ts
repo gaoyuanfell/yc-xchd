@@ -85,6 +85,41 @@ export class PinDirective implements OnInit, OnDestroy, AfterContentInit {
     console.info(this.bcrt);
     console.info(this.bcrt2);
     console.info(this.bcrt2.bottom - target.scrollTop - this.bcrt.height);
+
+    // let bottom = 0;
+    // if(this.attach){
+    //   let asd = this.attach.getBoundingClientRect()
+    //   bottom = asd.bottom - this.bcrt.bottom + asd.height
+    // }
+
+    // if((this.bcrt2.bottom - target.scrollTop - this.bcrt.height) > 0){
+    //   if(this.ref.nativeElement.nodeName == 'TR'){
+    //     Array.from(this.ref.nativeElement.children).forEach((ele)=> {
+    //       this.renderer.setStyle(ele, 'position', `sticky`);
+    //       this.renderer.setStyle(ele, 'bottom', `${bottom}px`);
+    //       this.renderer.setStyle(ele, 'z-index', `2`);
+    //     })
+    //     return;
+    //   }
+
+    //   this.renderer.setStyle(this.ref.nativeElement, 'position', `absolute`);
+    //   this.renderer.setStyle(this.ref.nativeElement, 'bottom', `${bottom}px`);
+    //   this.renderer.setStyle(this.ref.nativeElement, 'z-index', `1`);
+    //   if(!this.div){
+    //     this.div = document.createElement('div');
+    //     this.renderer.setStyle(this.div, 'width', `${this.bcrt2.width}px`);
+    //     this.renderer.setStyle(this.div, 'height', `${this.bcrt2.height}px`);
+    //     (<HTMLDivElement>this.ref.nativeElement).parentNode.insertBefore(this.div, this.ref.nativeElement)
+    //   }
+    // }else{
+    //   this.renderer.removeStyle(this.ref.nativeElement, 'position')
+    //   this.renderer.removeStyle(this.ref.nativeElement, 'bottom')
+    //   this.renderer.removeStyle(this.ref.nativeElement, 'z-index')
+    //   if(this.div){
+    //     (<HTMLDivElement>this.ref.nativeElement).parentNode.removeChild(this.div)
+    //     this.div = null;
+    //   }
+    // }
   }
 
   top(target){
