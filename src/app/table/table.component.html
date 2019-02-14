@@ -1,5 +1,5 @@
 <moka-scroll>
-
+  <moka-modal>
     <div class="query-tool">
       <div class="left-tool">
         <h2>标题</h2>
@@ -101,6 +101,8 @@
       </tfoot>
     </table>
     <div pin [direction]="'bottom'" #zxc>
-      <mat-paginator [pageSizeOptions]="[5, 10, 20, 50, 100]" [pageSize]="20" [pageIndex]="0" [length]="100" showFirstLastButtons (page)="page($event)"></mat-paginator>
+      <mat-paginator [pageSizeOptions]="[5, 10, 20, 50, 100]" [pageSize]="20" [pageIndex]="0" [length]="100"
+        showFirstLastButtons (page)="page($event)"></mat-paginator>
     </div>
+  </moka-modal>
 </moka-scroll>

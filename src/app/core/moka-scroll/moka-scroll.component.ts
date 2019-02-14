@@ -13,6 +13,7 @@ import { Component, OnInit, ViewEncapsulation, ElementRef } from '@angular/core'
         display: block;
         overflow: auto;
         height: 100%;
+        background: #fff;
       }
     `
   ]

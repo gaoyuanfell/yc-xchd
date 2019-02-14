@@ -49,11 +49,43 @@ export class PinDirective implements OnInit, OnDestroy, AfterContentInit {
   ngAfterContentInit() {
     setTimeout(() => {
       this.bcrt = (<HTMLDivElement>this._mokaScrollComponent.ref.nativeElement).getBoundingClientRect();
-      let bcrt2 = this.bcrt2 = (<HTMLDivElement>this.ref.nativeElement).getBoundingClientRect();
-      this.renderer.setStyle(this.ref.nativeElement, 'width', `${bcrt2.width}px`)
-      this.renderer.setStyle(this.ref.nativeElement, 'height', `${bcrt2.height}px`);
+      this.bcrt2 = (<HTMLDivElement>this.ref.nativeElement).getBoundingClientRect();
+      this.renderer.setStyle(this.ref.nativeElement, 'width', `${this.bcrt2.width}px`)
+      this.renderer.setStyle(this.ref.nativeElement, 'height', `${this.bcrt2.height}px`);
+
+      switch (this.direction){
+        case 'top':
+          this.top();
+        break;
+        case 'bottom':
+          this.bottom();
+        break;
+      }
+
     }, 0);
     fromEvent(this._mokaScrollComponent.ref.nativeElement, 'scroll').subscribe(this.scrollEvent.bind(this))
+
+    fromEvent(window, 'resize').subscribe(() => {
+      this.renderer.removeStyle(this.ref.nativeElement, 'width');
+      this.renderer.removeStyle(this.ref.nativeElement, 'height');
+      this.bcrt = (<HTMLDivElement>this._mokaScrollComponent.ref.nativeElement).getBoundingClientRect();
+      this.bcrt2 = (<HTMLDivElement>this.ref.nativeElement).getBoundingClientRect();
+      if(this.div){
+        this.renderer.removeStyle(this.div, 'width');
+        this.bcrt2 = (<HTMLDivElement>this.div).getBoundingClientRect();
+      }
+      this.renderer.setStyle(this.ref.nativeElement, 'width', `${this.bcrt2.width}px`);
+      this.renderer.setStyle(this.ref.nativeElement, 'height', `${this.bcrt2.height}px`);
+
+      switch (this.direction){
+        case 'top':
+          this.top();
+        break;
+        case 'bottom':
+          this.bottom();
+        break;
+      }
+    })
   }
 
   bcrt
@@ -62,25 +94,28 @@ export class PinDirective implements OnInit, OnDestroy, AfterContentInit {
 
   div
 
+  scrollTop = 0
+
   scrollEvent(event){
+    this.scrollTop = event.target.scrollTop
     switch (this.direction){
       case 'top':
-        this.top(event.target);
+        this.top();
       break;
       case 'bottom':
-        this.bottom(event.target);
+        this.bottom();
       break;
     }
   }
 
-  bottom(target){
+  bottom(){
     let bottom = 0;
     if(this.attach){
       let asd = this.attach.getBoundingClientRect()
-      bottom = this.bcrt.bottom - asd.bottom + asd.height
+      bottom = this.bcrt2.bottom - asd.bottom + asd.height
     }
 
-    if((this.bcrt2.bottom - this.bcrt.bottom - target.scrollTop + bottom) > 0){
+    if((this.bcrt2.bottom - this.bcrt.bottom - this.scrollTop + bottom) >= 0){
       if(this.ref.nativeElement.nodeName == 'TR'){
         Array.from(this.ref.nativeElement.children).forEach((ele)=> {
           this.renderer.setStyle(ele, 'position', `sticky`);
@@ -94,10 +129,12 @@ export class PinDirective implements OnInit, OnDestroy, AfterContentInit {
       this.renderer.setStyle(this.ref.nativeElement, 'z-index', `1`);
       if(!this.div){
         this.div = document.createElement('div');
-        this.renderer.setStyle(this.div, 'width', `${this.bcrt2.width}px`);
-        this.renderer.setStyle(this.div, 'height', `${this.bcrt2.height}px`);
         (<HTMLDivElement>this.ref.nativeElement).parentNode.insertBefore(this.div, this.ref.nativeElement)
       }
+      console.info(this.bcrt2)
+      this.renderer.setStyle(this.div, 'width', `${this.bcrt2.width}px`);
+      this.renderer.setStyle(this.div, 'height', `${this.bcrt2.height}px`);
+
     }else{
       if(this.ref.nativeElement.nodeName == 'TR'){
         Array.from(this.ref.nativeElement.children).forEach((ele)=> {
@@ -117,14 +154,14 @@ export class PinDirective implements OnInit, OnDestroy, AfterContentInit {
     }
   }
 
-  top(target){
+  top(){
     let top = 0;
     if(this.attach){
       let asd = this.attach.getBoundingClientRect()
       top = asd.top - this.bcrt.top + asd.height
     }
 
-    if((this.bcrt2.top - this.bcrt.top - target.scrollTop - top) < 0){
+    if((this.bcrt2.top - this.bcrt.top - this.scrollTop - top) <= 0){
       if(this.ref.nativeElement.nodeName == 'TR'){
         Array.from(this.ref.nativeElement.children).forEach((ele)=> {
           this.renderer.setStyle(ele, 'position', `sticky`);
@@ -139,10 +176,10 @@ export class PinDirective implements OnInit, OnDestroy, AfterContentInit {
       this.renderer.setStyle(this.ref.nativeElement, 'z-index', `1`);
       if(!this.div){
         this.div = document.createElement('div');
-        this.renderer.setStyle(this.div, 'width', `${this.bcrt2.width}px`);
-        this.renderer.setStyle(this.div, 'height', `${this.bcrt2.height}px`);
         (<HTMLDivElement>this.ref.nativeElement).parentNode.insertBefore(this.div, this.ref.nativeElement)
       }
+      this.renderer.setStyle(this.div, 'width', `${this.bcrt2.width}px`);
+      this.renderer.setStyle(this.div, 'height', `${this.bcrt2.height}px`);
     }else{
       if(this.ref.nativeElement.nodeName == 'TR'){
         Array.from(this.ref.nativeElement.children).forEach((ele)=> {
