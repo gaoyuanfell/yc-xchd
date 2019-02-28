@@ -22,7 +22,7 @@
       </div>
     </div>
 
-    <div class="query-tool" pin #asdasd>
+    <div class="query-tool" pin>
       <div class="left-tool">
         <mat-form-field>
           <mat-select placeholder="Toppings" multiple>
@@ -79,8 +79,7 @@
       <tbody>
         <tr class="mat-row" *ngFor="let dessert of desserts">
           <td class="mat-cell">
-            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(dessert) : null"
-              [checked]="selection.isSelected(dessert)"> </mat-checkbox>
+            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(dessert) : null" [checked]="selection.isSelected(dessert)"> </mat-checkbox>
           </td>
           <td class="mat-cell">{{dessert.name}}</td>
           <td class="mat-cell">{{dessert.calories}}</td>
@@ -90,7 +89,8 @@
         </tr>
       </tbody>
       <tfoot>
-        <tr class="mat-footer-row" pin [direction]="'bottom'" [attach]="zxc">
+        <!-- pin [direction]="'bottom'" [attach]="zxc" -->
+        <tr class="mat-footer-row">
           <td class="mat-footer-cell"> </td>
           <td class="mat-footer-cell"> Total </td>
           <td class="mat-footer-cell"> </td>
@@ -100,9 +100,9 @@
         </tr>
       </tfoot>
     </table>
-    <div pin [direction]="'bottom'" #zxc>
-      <mat-paginator [pageSizeOptions]="[5, 10, 20, 50, 100]" [pageSize]="20" [pageIndex]="0" [length]="100"
-        showFirstLastButtons (page)="page($event)"></mat-paginator>
+    <!-- pin [direction]="'bottom'" #zxc -->
+    <div>
+      <mat-paginator [pageSizeOptions]="[5, 10, 20, 50, 100]" [pageSize]="20" [pageIndex]="0" [length]="100" showFirstLastButtons (page)="page($event)"></mat-paginator>
     </div>
   </moka-modal>
 </moka-scroll>
