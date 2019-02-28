@@ -71,6 +71,9 @@ export class PinDirective implements OnInit, OnDestroy, AfterContentInit {
       console.info(top)
       console.info(bcrt.top)
       console.info(bcrt2.top)
+      if(bcrt2.top - top <= 0){
+
+      }
       // if(bcrt.top <= bcrt2.top){
       //   console.info('ok')
       //   this.renderer.setStyle(this.ref.nativeElement, 'top', `${top - bcrt2.top}px`)
