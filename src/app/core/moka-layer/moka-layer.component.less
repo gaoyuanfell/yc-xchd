@@ -1,8 +1,9 @@
-@header-height: 66px;
+@header-height: 64px;
 @sidenav-width: 180px;
 
 .mat-drawer-container {
   height: calc(100% - @header-height);
+  max-height: calc(100% - @header-height);
 }
 
 .mat-drawer {
@@ -32,4 +33,9 @@
   width: 100%;
   height: 100%;
   overflow: auto;
+}
+
+.moka-layer{
+  // display: flex;
+  // flex-direction: column;
 }

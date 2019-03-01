@@ -9,15 +9,14 @@ import {
   Renderer2,
   AfterContentInit
 } from "@angular/core";
-import { MokaScrollComponent } from 'src/app/core/moka-scroll/moka-scroll.component';
-import { fromEvent } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { MokaScrollComponent } from "src/app/core/moka-scroll/moka-scroll.component";
+import { fromEvent } from "rxjs";
+import { map } from "rxjs/operators";
 
 @Directive({
   selector: "[pin]"
 })
 export class PinDirective implements OnInit, OnDestroy, AfterContentInit {
-
   @Input() set scroll(val) {
     this._scroll = val;
   }
@@ -25,7 +24,6 @@ export class PinDirective implements OnInit, OnDestroy, AfterContentInit {
     return this._scroll;
   }
   private _scroll;
-
 
   @Input() set attach(val) {
     this._attach = val;
@@ -41,53 +39,76 @@ export class PinDirective implements OnInit, OnDestroy, AfterContentInit {
   get direction() {
     return this._direction;
   }
-  private _direction: 'top' | 'bottom' = 'top';
+  private _direction: "top" | "bottom" = "top";
 
-  constructor(@Host() @Optional() private _mokaScrollComponent: MokaScrollComponent, private ref: ElementRef,private renderer:Renderer2){
+  constructor(
+    @Host() @Optional() private _mokaScrollComponent: MokaScrollComponent,
+    private ref: ElementRef,
+    private renderer: Renderer2
+  ) {
     console.info(_mokaScrollComponent);
     console.info(ref);
   }
 
-  ngAfterContentInit(): void {
+  ngAfterContentInit(): void {}
 
-  }
+  avatarBox;
 
-  avatarBox
-
-  createAvatarBox(){
-    if(!this.avatarBox){
-      this.avatarBox = document.createElement('div');
-      (<HTMLDivElement>this.ref.nativeElement).parentNode.insertBefore(this.avatarBox, this.ref.nativeElement)
-      this.avatarBox.appendChild(this.ref.nativeElement)
-      this.renderer.setStyle(this.ref.nativeElement, 'position', 'relative')
+  createAvatarBox() {
+    if (!this.avatarBox) {
+      this.avatarBox = document.createElement("div");
+      (<HTMLDivElement>this.ref.nativeElement).parentNode.insertBefore(this.avatarBox, this.ref.nativeElement);
+      this.avatarBox.appendChild(this.ref.nativeElement);
+      this.renderer.setStyle(this.ref.nativeElement, "position", "relative");
+      this.renderer.setStyle(this.ref.nativeElement, "z-index", "100000");
+      setTimeout(() => {
+        this.originalBcrt = this.ref.nativeElement.getBoundingClientRect();
+        if(this.attach){
+          this.originalAttachBcrt = this.attach.getBoundingClientRect();
+        }
+      });
     }
   }
 
+  originalBcrt: ClientRect | DOMRect;
+  originalAttachBcrt: ClientRect | DOMRect;
+
   ngOnInit() {
-    this.createAvatarBox()
-    fromEvent(this._mokaScrollComponent.ref.nativeElement, 'scroll').pipe(map((event:any) => event.target.scrollTop)).subscribe(top => {
-      let bcrt = this.ref.nativeElement.getBoundingClientRect()
-      let bcrt2 = this._mokaScrollComponent.ref.nativeElement.getBoundingClientRect()
-      console.info(top)
-      console.info(bcrt.top)
-      console.info(bcrt2.top)
-      if(bcrt2.top - top <= 0){
+    this.createAvatarBox();
+    fromEvent(this._mokaScrollComponent.ref.nativeElement, "scroll")
+      .pipe(map((event: any) => event.target.scrollTop))
+      .subscribe(scrollTop => {
+        if (!this.originalBcrt) return;
+        this.position(scrollTop)
+      });
+  }
+
+  position(scrollTop){
+    switch(this.direction){
+      case 'top':{
+        this.top(scrollTop)
+      }
+      case 'bottom':{
 
       }
-      // if(bcrt.top <= bcrt2.top){
-      //   console.info('ok')
-      //   this.renderer.setStyle(this.ref.nativeElement, 'top', `${top - bcrt2.top}px`)
-      // }
+    }
+  }
 
-      // this.renderer.setStyle(this.ref.nativeElement, 'top', `${top - bcrt2.top}px`)
-      // if(bcrt.top - bcrt2.top <= 0){
-      //   this.renderer.setStyle(this.ref.nativeElement, 'top', `${top - bcrt2.top}px`)
-      // }else{
-      //   this.renderer.removeStyle(this.ref.nativeElement, 'top')
-      // }
-      // console.info(bcrt.top - bcrt2.top)
+  top(scrollTop){
+    let bcrt2 = this._mokaScrollComponent.ref.nativeElement.getBoundingClientRect();
+    let top = bcrt2.top
+    if(this.originalAttachBcrt){
+      top = this.originalAttachBcrt.top + this.originalAttachBcrt.height;
+    }
+    if(this.originalBcrt.top - top - scrollTop <= 0){
+      this.renderer.setStyle(this.ref.nativeElement, 'top', `${scrollTop - (this.originalBcrt.top - top)}px`)
+    }else{
+      this.renderer.removeStyle(this.ref.nativeElement, 'top')
+    }
+  }
 
-    })
+  bottom(){
+
   }
 
   ngOnDestroy() {}

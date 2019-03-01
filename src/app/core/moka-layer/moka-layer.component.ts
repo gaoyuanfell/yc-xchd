@@ -4,6 +4,9 @@ import { Component, OnInit, ViewEncapsulation } from "@angular/core";
   selector: "moka-layer",
   templateUrl: "./moka-layer.component.html",
   styleUrls: ["./moka-layer.component.less"],
+  host: {
+    "[attr.class]": '"moka-layer"',
+  },
   encapsulation: ViewEncapsulation.None
 })
 export class MokaLayerComponent implements OnInit {
