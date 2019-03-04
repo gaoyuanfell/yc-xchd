@@ -45,10 +45,7 @@ export class PinDirective implements OnInit, OnDestroy, AfterContentInit {
     @Host() @Optional() private _mokaScrollComponent: MokaScrollComponent,
     private ref: ElementRef,
     private renderer: Renderer2
-  ) {
-    console.info(_mokaScrollComponent);
-    console.info(ref);
-  }
+  ) {}
 
   ngAfterContentInit(): void {}
 
@@ -57,15 +54,19 @@ export class PinDirective implements OnInit, OnDestroy, AfterContentInit {
   createAvatarBox() {
     if (!this.avatarBox) {
       this.avatarBox = document.createElement("div");
-      (<HTMLDivElement>this.ref.nativeElement).parentNode.insertBefore(this.avatarBox, this.ref.nativeElement);
+      (<HTMLDivElement>this.ref.nativeElement).parentNode.insertBefore(
+        this.avatarBox,
+        this.ref.nativeElement
+      );
       this.avatarBox.appendChild(this.ref.nativeElement);
       this.renderer.setStyle(this.ref.nativeElement, "position", "relative");
       this.renderer.setStyle(this.ref.nativeElement, "z-index", "100000");
       setTimeout(() => {
         this.originalBcrt = this.ref.nativeElement.getBoundingClientRect();
-        if(this.attach){
+        if (this.attach) {
           this.originalAttachBcrt = this.attach.getBoundingClientRect();
         }
+        this.position(0);
       });
     }
   }
@@ -79,36 +80,55 @@ export class PinDirective implements OnInit, OnDestroy, AfterContentInit {
       .pipe(map((event: any) => event.target.scrollTop))
       .subscribe(scrollTop => {
         if (!this.originalBcrt) return;
-        this.position(scrollTop)
+        this.position(scrollTop);
       });
   }
 
-  position(scrollTop){
-    switch(this.direction){
-      case 'top':{
-        this.top(scrollTop)
+  position(scrollTop) {
+    switch (this.direction) {
+      case "top": {
+        this.top(scrollTop);
       }
-      case 'bottom':{
-
+      case "bottom": {
+        this.bottom(scrollTop);
       }
     }
   }
 
-  top(scrollTop){
-    let bcrt2 = this._mokaScrollComponent.ref.nativeElement.getBoundingClientRect();
-    let top = bcrt2.top
-    if(this.originalAttachBcrt){
+  top(scrollTop) {
+    let bcrt = this._mokaScrollComponent.ref.nativeElement.getBoundingClientRect();
+    let top = bcrt.top;
+    if (this.originalAttachBcrt) {
       top = this.originalAttachBcrt.top + this.originalAttachBcrt.height;
     }
-    if(this.originalBcrt.top - top - scrollTop <= 0){
-      this.renderer.setStyle(this.ref.nativeElement, 'top', `${scrollTop - (this.originalBcrt.top - top)}px`)
-    }else{
-      this.renderer.removeStyle(this.ref.nativeElement, 'top')
+    if (this.originalBcrt.top - top - scrollTop <= 0) {
+      this.renderer.setStyle(
+        this.ref.nativeElement,
+        "top",
+        `${scrollTop - (this.originalBcrt.top - top)}px`
+      );
+    } else {
+      this.renderer.removeStyle(this.ref.nativeElement, "top");
     }
   }
 
-  bottom(){
-
+  bottom(scrollTop) {
+    let bcrt:
+      | ClientRect
+      | DOMRect = this._mokaScrollComponent.ref.nativeElement.getBoundingClientRect();
+    let bottom = bcrt.bottom;
+    if (this.originalAttachBcrt) {
+      bottom = bottom - this.originalAttachBcrt.height;
+    }
+    if (this.originalBcrt.bottom >= bottom + scrollTop) {
+      this.renderer.setStyle(
+        this.ref.nativeElement,
+        "bottom",
+        `${this.originalBcrt.bottom - (bottom + scrollTop)}px`
+      );
+    } else {
+      this.renderer.removeStyle(this.ref.nativeElement, "bottom");
+    }
   }
 
   ngOnDestroy() {}

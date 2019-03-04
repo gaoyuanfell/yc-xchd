@@ -73,7 +73,7 @@
           <th class="mat-header-cell" mat-sort-header="calories">Calories</th>
           <th class="mat-header-cell" mat-sort-header="fat">Fat (g)</th>
           <th class="mat-header-cell" mat-sort-header="carbs">Carbs (g)</th>
-          <th class="mat-header-cell" mat-sort-header="protein">Protein (g) 11111111111111</th>
+          <th class="mat-header-cell" mat-sort-header="protein">Protein (g)</th>
         </tr>
       </thead>
       <tbody>
@@ -89,7 +89,6 @@
         </tr>
       </tbody>
       <tfoot>
-        <!-- pin [direction]="'bottom'" [attach]="zxc" -->
         <tr class="mat-footer-row">
           <td class="mat-footer-cell"> </td>
           <td class="mat-footer-cell"> Total </td>
@@ -100,8 +99,8 @@
         </tr>
       </tfoot>
     </table>
-    <!-- pin [direction]="'bottom'" #zxc -->
-    <div>
+
+    <div #aaa pin [direction]="'bottom'">
       <mat-paginator [pageSizeOptions]="[5, 10, 20, 50, 100]" [pageSize]="20" [pageIndex]="0" [length]="100" showFirstLastButtons (page)="page($event)"></mat-paginator>
     </div>
   </moka-modal>
