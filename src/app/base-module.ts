@@ -2,22 +2,24 @@ import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { CoreModule } from './core/core.module';
 import { MatModule } from './mat-module';
-import { PinDirective } from './components/pin/pin.directive';
+import { PinModule } from './components/pin/pin.module';
 
 @NgModule({
   declarations: [
-    PinDirective,
+
   ],
   imports: [
     CommonModule,
     CoreModule,
     MatModule,
+
+    PinModule,
   ],
   exports: [
     CoreModule,
     MatModule,
 
-    PinDirective,
+    PinModule,
   ]
 })
 export class BaseModule {}

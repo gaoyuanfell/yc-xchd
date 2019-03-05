@@ -15,7 +15,7 @@
           <button mat-menu-item>Invertebrates</button>
         </mat-menu>
 
-        <button mat-stroked-button>Basic</button>
+        <button mat-stroked-button (click)="test()">Basic</button>
         <button mat-stroked-button color="primary">Primary</button>
         <button mat-stroked-button color="accent">Accent</button>
         <button mat-stroked-button color="warn">Warn</button>
@@ -65,9 +65,8 @@
       <thead>
         <tr class="mat-header-row">
           <th class="mat-header-cell">
-            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
-              [indeterminate]="selection.hasValue() && !isAllSelected()">
-            </mat-checkbox>
+              <!-- $event ? masterToggle() : null -->
+            <mat-checkbox (change)="masterToggle()" [checked]="checked()" [indeterminate]="indeterminate()"></mat-checkbox>
           </th>
           <th class="mat-header-cell" mat-sort-header="name">Dessert (100g)</th>
           <th class="mat-header-cell" mat-sort-header="calories">Calories</th>
@@ -77,15 +76,15 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="mat-row" *ngFor="let dessert of desserts">
+        <tr class="mat-row" *ngFor="let item of tableList">
           <td class="mat-cell">
-            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(dessert) : null" [checked]="selection.isSelected(dessert)"> </mat-checkbox>
+            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(item) : null" [checked]="selection.isSelected(item)"> </mat-checkbox>
           </td>
-          <td class="mat-cell">{{dessert.name}}</td>
-          <td class="mat-cell">{{dessert.calories}}</td>
-          <td class="mat-cell">{{dessert.fat}}</td>
-          <td class="mat-cell">{{dessert.carbs}}</td>
-          <td class="mat-cell">{{dessert.protein}}</td>
+          <td class="mat-cell">{{item.name}}</td>
+          <td class="mat-cell">{{item.calories}}</td>
+          <td class="mat-cell">{{item.fat}}</td>
+          <td class="mat-cell">{{item.carbs}}</td>
+          <td class="mat-cell">{{item.protein}}</td>
         </tr>
       </tbody>
       <tfoot>
@@ -100,8 +99,8 @@
       </tfoot>
     </table>
 
-    <div #aaa pin [direction]="'bottom'">
-      <mat-paginator [pageSizeOptions]="[5, 10, 20, 50, 100]" [pageSize]="20" [pageIndex]="0" [length]="100" showFirstLastButtons (page)="page($event)"></mat-paginator>
+    <div pin [direction]="'bottom'">
+      <mat-paginator [pageSizeOptions]="pageSizeList" [pageSize]="query.pageSize" [pageIndex]="query.pageIndex" [length]="pageTotal" showFirstLastButtons (page)="page($event)"></mat-paginator>
     </div>
   </moka-modal>
 </moka-scroll>
