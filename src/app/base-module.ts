@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { CoreModule } from './core/core.module';
 import { MatModule } from './mat-module';
-import { PinModule } from './components/pin/pin.module';
+import { PinModule, StickyModule } from './components';
 
 @NgModule({
   declarations: [
@@ -14,12 +14,14 @@ import { PinModule } from './components/pin/pin.module';
     MatModule,
 
     PinModule,
+    StickyModule,
   ],
   exports: [
     CoreModule,
     MatModule,
 
     PinModule,
+    StickyModule,
   ]
 })
 export class BaseModule {}

@@ -1,23 +1,27 @@
 import { SelectionModel } from "@angular/cdk/collections";
 import { MatPaginator, MatSort, Sort, PageEvent } from "@angular/material";
-import { ViewChild, Inject } from "@angular/core";
+import { ViewChild, Injector } from "@angular/core";
 import { AutoCookie } from "./decorator/decorator";
-import { PinService } from '../components/pin/pin.service';
+import { PinService } from "../components/pin/pin.service";
 
 export abstract class QueryComponent<T> {
+  protected constructor(public injector: Injector) {
+    this._pinService = injector.get(PinService);
+  }
+
+  private _pinService: PinService;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  @Inject(PinService) pinService
-
   private _tableList: T[] = [];
 
-  set tableList(data: T[]){
-    this._tableList = data
+  set tableList(data: T[]) {
+    this._tableList = data;
+    this._pinService.subscribe();
   }
 
-  get tableList():T[]{
-    return this._tableList
+  get tableList(): T[] {
+    return this._tableList;
   }
 
   selection = new SelectionModel<T>(true, []);
@@ -30,7 +34,7 @@ export abstract class QueryComponent<T> {
       pageIndex: 0
     }
   })
-  query;
+  protected query;
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;
@@ -52,6 +56,10 @@ export abstract class QueryComponent<T> {
     return this.selection.hasValue() && this.isAllSelected();
   }
 
+  /**
+   * @description
+   * 必须实现
+   */
   abstract search(): void;
 
   sortData(sort: Sort) {
@@ -64,6 +72,5 @@ export abstract class QueryComponent<T> {
     this.query.pageSize = page.pageSize;
     this.query.pageIndex = page.pageIndex;
     this.search();
-    console.info(this.pinService)
   }
 }

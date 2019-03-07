@@ -7,11 +7,15 @@ import {
   Optional,
   ElementRef,
   Renderer2,
-  AfterContentInit
+  AfterContentInit,
+  ChangeDetectionStrategy,
+  DoCheck,
+  AfterContentChecked,
+  AfterViewChecked
 } from "@angular/core";
 import { MokaScrollComponent } from "src/app/core/moka-scroll/moka-scroll.component";
-import { fromEvent } from "rxjs";
-import { map } from "rxjs/operators";
+import { fromEvent, Observable } from "rxjs";
+import { map, bufferCount, debounceTime, tap } from "rxjs/operators";
 import { PinService } from "./pin.service";
 
 @Directive({
@@ -51,7 +55,6 @@ export class PinDirective implements OnInit, OnDestroy, AfterContentInit {
     pinService.add(this);
   }
 
-  ngAfterContentInit(): void {}
 
   avatarBox;
 
@@ -71,13 +74,16 @@ export class PinDirective implements OnInit, OnDestroy, AfterContentInit {
         this.originalAttachBcrt = this.attach.getBoundingClientRect();
       }
       this.position(this.scrollTop || 0);
-    });
+    }, 100);
   }
 
+  private subscribeNumber
   subscribeChange() {
     if (!this.avatarBox) return;
+    console.info('o11111k')
     this.originalScrollTop = this._mokaScrollComponent.ref.nativeElement.scrollTop;
-    setTimeout(() => {
+    if(this.subscribeNumber) clearTimeout(this.subscribeNumber);
+    this.subscribeNumber = setTimeout(() => {
       this.removeStyle();
       this.originalBcrt = this.ref.nativeElement.getBoundingClientRect();
       if (this.attach) {
@@ -85,7 +91,7 @@ export class PinDirective implements OnInit, OnDestroy, AfterContentInit {
       }
       this.addStyle();
       this.position(this.scrollTop || 0);
-    });
+    }, 100);
   }
 
   addStyle() {
@@ -105,7 +111,9 @@ export class PinDirective implements OnInit, OnDestroy, AfterContentInit {
   scrollTop;
   originalScrollTop = 0;
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  ngAfterContentInit(): void {
     this.initAvatarBox();
     fromEvent(this._mokaScrollComponent.ref.nativeElement, "scroll")
       .pipe(map((event: any) => event.target.scrollTop))
@@ -114,9 +122,13 @@ export class PinDirective implements OnInit, OnDestroy, AfterContentInit {
         this.scrollTop = scrollTop;
         this.position(scrollTop);
       });
-    fromEvent(window, "resize").subscribe(() => {
+    let resizeEvent: Observable<any> = fromEvent(window, "resize")
+    resizeEvent.subscribe(()=> {
       this.position(this.scrollTop || 0);
-    });
+    })
+    resizeEvent.pipe(debounceTime(50)).subscribe(()=> {
+      this.subscribeChange()
+    })
   }
 
   position(scrollTop) {

@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'moka-header',
-  templateUrl: './moka-header.component.html',
-  styleUrls: ['./moka-header.component.less'],
+  template: '<ng-content></ng-content>',
+  styles: [],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })
 export class MokaHeaderComponent implements OnInit {
