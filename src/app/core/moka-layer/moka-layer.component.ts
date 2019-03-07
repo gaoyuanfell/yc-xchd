@@ -1,10 +1,14 @@
-import { Component, OnInit, ViewEncapsulation } from "@angular/core";
+import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy } from "@angular/core";
 
 @Component({
   selector: "moka-layer",
   templateUrl: "./moka-layer.component.html",
   styleUrls: ["./moka-layer.component.less"],
-  encapsulation: ViewEncapsulation.None
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    "[attr.class]": '"moka-layer"',
+  },
 })
 export class MokaLayerComponent implements OnInit {
   menuList = [

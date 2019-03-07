@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewEncapsulation } from "@angular/core";
+import { Component, OnInit, Input, ViewEncapsulation, ChangeDetectionStrategy } from "@angular/core";
 import {
   trigger,
   state,
@@ -12,6 +12,7 @@ import { Router } from "@angular/router";
   selector: "moka-menu",
   templateUrl: "./moka-menu.component.html",
   styleUrls: ["./moka-menu.component.less"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
     "[attr.class]": '"menu"',

@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewEncapsulation, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'moka-scroll',
   template: `<ng-content></ng-content>`,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
     "[attr.class]": '"moka-scroll"',

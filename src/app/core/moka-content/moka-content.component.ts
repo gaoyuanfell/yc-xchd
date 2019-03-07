@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'moka-content',
-  templateUrl: './moka-content.component.html',
-  styleUrls: ['./moka-content.component.less'],
+  template: `<ng-content></ng-content>`,
+  styles: [],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })
 export class MokaContentComponent implements OnInit {

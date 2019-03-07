@@ -1,23 +1,18 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, ViewEncapsulation } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { bounceInLeft } from '../animations/route-animations';
 
 @Component({
   selector: 'moka-bounce-in-left',
   template: '<ng-content></ng-content>',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   animations:[
     bounceInLeft
   ],
   host:{
     '[@bounceInLeft]':'prepareRoute(outlet)'
   },
-  // styles:[
-  //   `
-  //   :host{
-  //     display: flex;
-  //   }
-  //   `
-  // ]
 })
 export class BounceInLeftComponent{
 
