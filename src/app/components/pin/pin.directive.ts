@@ -8,14 +8,10 @@ import {
   ElementRef,
   Renderer2,
   AfterContentInit,
-  ChangeDetectionStrategy,
-  DoCheck,
-  AfterContentChecked,
-  AfterViewChecked
 } from "@angular/core";
 import { MokaScrollComponent } from "src/app/core/moka-scroll/moka-scroll.component";
 import { fromEvent, Observable } from "rxjs";
-import { map, bufferCount, debounceTime, tap } from "rxjs/operators";
+import { map, debounceTime } from "rxjs/operators";
 import { PinService } from "./pin.service";
 
 @Directive({
@@ -58,6 +54,7 @@ export class PinDirective implements OnInit, OnDestroy, AfterContentInit {
 
   avatarBox;
 
+  initAvatarNum
   initAvatarBox() {
     if (!this.avatarBox) {
       this.avatarBox = document.createElement("div");
@@ -68,21 +65,20 @@ export class PinDirective implements OnInit, OnDestroy, AfterContentInit {
     }
     this.avatarBox.appendChild(this.ref.nativeElement);
     this.addStyle();
-    setTimeout(() => {
+    this.initAvatarNum = setTimeout(() => {
       this.originalBcrt = this.ref.nativeElement.getBoundingClientRect();
       if (this.attach) {
         this.originalAttachBcrt = this.attach.getBoundingClientRect();
       }
       this.position(this.scrollTop || 0);
-    }, 100);
+    }, 150);
   }
 
   private subscribeNumber
   subscribeChange() {
     if (!this.avatarBox) return;
-    console.info('o11111k')
-    this.originalScrollTop = this._mokaScrollComponent.ref.nativeElement.scrollTop;
     if(this.subscribeNumber) clearTimeout(this.subscribeNumber);
+    this.originalScrollTop = this._mokaScrollComponent.ref.nativeElement.scrollTop;
     this.subscribeNumber = setTimeout(() => {
       this.removeStyle();
       this.originalBcrt = this.ref.nativeElement.getBoundingClientRect();
@@ -91,7 +87,7 @@ export class PinDirective implements OnInit, OnDestroy, AfterContentInit {
       }
       this.addStyle();
       this.position(this.scrollTop || 0);
-    }, 100);
+    }, 150);
   }
 
   addStyle() {
@@ -126,7 +122,7 @@ export class PinDirective implements OnInit, OnDestroy, AfterContentInit {
     resizeEvent.subscribe(()=> {
       this.position(this.scrollTop || 0);
     })
-    resizeEvent.pipe(debounceTime(50)).subscribe(()=> {
+    resizeEvent.pipe(debounceTime(100)).subscribe(()=> {
       this.subscribeChange()
     })
   }

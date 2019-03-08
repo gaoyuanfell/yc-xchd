@@ -20,6 +20,7 @@ export class PinService {
 
   subscribe() {
     this.pinList.forEach(p => {
+      console.info(p)
       p.subscribeChange();
     });
   }

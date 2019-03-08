@@ -73,7 +73,6 @@ export class TableComponent extends QueryComponent<any> implements OnInit {
   }
 
   test() {
-    console.info(this.selection);
     let list = [...this.tableList];
     list.push(...this.data);
     this.tableList = list;
