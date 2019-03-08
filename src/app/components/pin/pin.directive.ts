@@ -74,7 +74,8 @@ export class PinDirective implements OnInit, OnDestroy, AfterContentInit {
     }, 150);
   }
 
-  private subscribeNumber
+  private subscribeNumber;
+
   subscribeChange() {
     if (!this.avatarBox) return;
     if(this.subscribeNumber) clearTimeout(this.subscribeNumber);
@@ -107,7 +108,9 @@ export class PinDirective implements OnInit, OnDestroy, AfterContentInit {
   scrollTop;
   originalScrollTop = 0;
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.info('ngOnInit')
+  }
 
   ngAfterContentInit(): void {
     this.initAvatarBox();
@@ -182,5 +185,6 @@ export class PinDirective implements OnInit, OnDestroy, AfterContentInit {
 
   ngOnDestroy() {
     this.pinService.remove(this);
+    console.info('ngOnDestroy')
   }
 }

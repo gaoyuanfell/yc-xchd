@@ -27,6 +27,7 @@ export interface Food {
   selector: "app-table",
   templateUrl: "./table.component.html",
   styleUrls: ["./table.component.less"],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TableComponent extends QueryComponent<any> implements OnInit {
   constructor(public injector: Injector, private matDialog: MatDialog) {
@@ -77,6 +78,12 @@ export class TableComponent extends QueryComponent<any> implements OnInit {
     list.push(...this.data);
     this.tableList = list;
     this.pageTotal = this.tableList.length;
+  }
+
+  trackBy(index, data){
+    console.info(index)
+    console.info(data)
+    return data
   }
 
   @ViewChild("aaa", { read: TemplateRef }) aaa: TemplateRef<any>;

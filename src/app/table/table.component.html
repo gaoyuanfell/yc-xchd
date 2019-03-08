@@ -181,7 +181,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="mat-row" *ngFor="let item of tableList">
+          <tr class="mat-row" *ngFor="let item of tableList;let index=index;let last=last;">
             <td class="mat-cell">
               <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(item) : null" [checked]="selection.isSelected(item)"> </mat-checkbox>
             </td>
