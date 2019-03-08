@@ -22,6 +22,7 @@
       </div>
     </div>
 
+    <!--  pin -->
     <div class="query-tool" pin>
       <div class="left-tool">
         <mat-form-field>
@@ -61,9 +62,9 @@
       </div>
     </div>
 
-    <table class="mat-table" matSort (matSortChange)="sortData($event)">
+    <table style="position: relative;" class="mat-table" matSort (matSortChange)="sortData($event)">
       <thead>
-        <tr class="mat-header-row">
+        <tr [sticky]="true" [position]="'top'" class="mat-header-row">
           <th class="mat-header-cell">
               <!-- $event ? masterToggle() : null -->
             <mat-checkbox (change)="masterToggle()" [checked]="checked()" [indeterminate]="indeterminate()"></mat-checkbox>
@@ -76,11 +77,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="mat-row" *ngFor="let item of tableList">
-          <td class="mat-cell">
+        <tr sticky class="mat-row" *ngFor="let item of tableList">
+          <td stickyStart class="mat-cell">
             <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(item) : null" [checked]="selection.isSelected(item)"> </mat-checkbox>
           </td>
-          <td class="mat-cell">{{item.name}}</td>
+          <td stickyStart class="mat-cell">{{item.name}}</td>
           <td class="mat-cell">{{item.calories}}</td>
           <td class="mat-cell">{{item.fat}}</td>
           <td class="mat-cell">{{item.carbs}}</td>
@@ -88,7 +89,7 @@
         </tr>
       </tbody>
       <tfoot>
-        <tr class="mat-footer-row">
+        <tr [sticky]="true" [position]="'bottom'" class="mat-footer-row">
           <td class="mat-footer-cell"> </td>
           <td class="mat-footer-cell"> Total </td>
           <td class="mat-footer-cell"> </td>
@@ -98,7 +99,7 @@
         </tr>
       </tfoot>
     </table>
-
+    <!--  -->
     <div pin [direction]="'bottom'">
       <mat-paginator [pageSizeOptions]="pageSizeList" [pageSize]="query.pageSize" [pageIndex]="query.pageIndex" [length]="pageTotal" showFirstLastButtons (page)="page($event)"></mat-paginator>
     </div>

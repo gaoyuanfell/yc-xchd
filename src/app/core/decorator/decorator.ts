@@ -1,3 +1,9 @@
+/*
+ * @Author: moka === gaoyuanfell@sina.com
+ * @Date: 2019-03-08 15:10:51
+ * @Last Modified by:   moka
+ * @Last Modified time: 2019-03-08 15:10:51
+ */
 export interface AutoCookieModel {
   keep?: boolean
   defaultValue?: { [key: string]: any }

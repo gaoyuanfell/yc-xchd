@@ -1,3 +1,9 @@
+/*
+ * @Author: moka === gaoyuanfell@sina.com
+ * @Date: 2019-03-08 15:11:31
+ * @Last Modified by:   moka
+ * @Last Modified time: 2019-03-08 15:11:31
+ */
 import { Component, OnInit, ViewEncapsulation, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({

@@ -1,4 +1,10 @@
-import { Directive, OnInit, ElementRef, Optional, Inject } from "@angular/core";
+/*
+ * @Author: moka === gaoyuanfell@sina.com
+ * @Date: 2019-03-08 15:13:45
+ * @Last Modified by: moka
+ * @Last Modified time: 2019-03-08 17:53:48
+ */
+import { Directive, OnInit, ElementRef, Optional, Inject, Input } from "@angular/core";
 import { StickyStyler } from "@angular/cdk/table";
 import { Directionality, Direction } from "@angular/cdk/bidi";
 import { DOCUMENT } from "@angular/common";
@@ -20,11 +26,26 @@ export class StickyDirective implements OnInit {
     private _platform?: Platform
   ) {}
 
+  @Input('sticky') sticky: boolean
+  @Input('position') position: 'top' | 'bottom'
+
   _stickyStyler: StickyStyler;
   protected stickyCssClass: string = "moka-table-sticky";
 
   ngOnInit() {
-    this._setupStickyStyler()
+    this._setupStickyStyler();
+
+    console.info(this._stickyStyler);
+
+    setTimeout(() => {
+      let trs = <HTMLElement>this.ref.nativeElement
+      let stickyStartStates = []
+      for (const tr of Array.from(trs.children)) {
+        stickyStartStates.push(tr.hasAttribute('stickyStart'));
+      }
+      this._stickyStyler.updateStickyColumns([<HTMLElement>this.ref.nativeElement], stickyStartStates, [])
+    }, 150);
+    // this._stickyStyler.stickRows([<HTMLElement>this.ref.nativeElement], [this.sticky], this.position)
 
     // console.info(this.ref);
     // let stickyRef: HTMLElement = this.ref.nativeElement;

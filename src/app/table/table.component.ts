@@ -1,12 +1,10 @@
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  Injector,
-  TemplateRef,
-  ChangeDetectionStrategy,
-  ViewEncapsulation
-} from "@angular/core";
+/*
+ * @Author: moka === gaoyuanfell@sina.com
+ * @Date: 2019-03-08 15:09:34
+ * @Last Modified by: moka
+ * @Last Modified time: 2019-03-08 17:36:29
+ */
+import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { MatDialog, MatDialogRef } from "@angular/material";
 import { QueryComponent } from "../core/query.component";
 
@@ -32,6 +30,7 @@ export interface Food {
 export class TableComponent extends QueryComponent<any> implements OnInit {
   constructor(public injector: Injector, private matDialog: MatDialog) {
     super(injector);
+    this.tableList = this.data
   }
 
   foods: Food[] = [
@@ -66,7 +65,7 @@ export class TableComponent extends QueryComponent<any> implements OnInit {
   ];
 
   ngOnInit() {
-    this.tableList = [];
+    // this.tableList = [];
   }
 
   search() {
@@ -89,10 +88,11 @@ export class TableComponent extends QueryComponent<any> implements OnInit {
   @ViewChild("aaa", { read: TemplateRef }) aaa: TemplateRef<any>;
 
   open() {
-    this.test()
     let matDialogRef: MatDialogRef<any, any> = this.matDialog.open(this.aaa);
+    matDialogRef.afterOpened().subscribe(()=> {
+      // this.test()
+    })
     matDialogRef.afterClosed().subscribe(()=> {
-      console.info('ok')
     })
   }
 }

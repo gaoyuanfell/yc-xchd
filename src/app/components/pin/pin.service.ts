@@ -1,3 +1,9 @@
+/*
+ * @Author: moka === gaoyuanfell@sina.com
+ * @Date: 2019-03-08 15:12:01
+ * @Last Modified by:   moka
+ * @Last Modified time: 2019-03-08 15:12:01
+ */
 import { Injectable } from "@angular/core";
 import { PinDirective } from "./pin.directive";
 
@@ -20,7 +26,6 @@ export class PinService {
 
   subscribe() {
     this.pinList.forEach(p => {
-      console.info(p)
       p.subscribeChange();
     });
   }

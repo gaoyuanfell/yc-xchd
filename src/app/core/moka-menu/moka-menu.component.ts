@@ -1,3 +1,9 @@
+/*
+ * @Author: moka === gaoyuanfell@sina.com
+ * @Date: 2019-03-08 15:11:23
+ * @Last Modified by:   moka
+ * @Last Modified time: 2019-03-08 15:11:23
+ */
 import { Component, OnInit, Input, ViewEncapsulation, ChangeDetectionStrategy } from "@angular/core";
 import {
   trigger,
