@@ -207,3 +207,7 @@
     </moka-modal>
   </moka-scroll>
 </ng-template>
+
+<moka-fade-in-out [outlet]="outlet">
+  <router-outlet #outlet="outlet"></router-outlet>
+</moka-fade-in-out>

@@ -18,12 +18,9 @@
     </moka-sidenav>
   </mat-sidenav>
   <mat-sidenav-content>
-    <!-- <moka-content class="moka-content"> -->
-
-      <moka-fade-in-out [outlet]="outlet">
-        <router-outlet #outlet="outlet"></router-outlet>
-      </moka-fade-in-out>
-
-    <!-- </moka-content> -->
+    <app-moka-router-tabs></app-moka-router-tabs>
+    <moka-fade-in-out [outlet]="outlet">
+      <router-outlet #outlet="outlet"></router-outlet>
+    </moka-fade-in-out>
   </mat-sidenav-content>
 </mat-sidenav-container>

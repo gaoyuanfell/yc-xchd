@@ -1,8 +1,8 @@
 /*
  * @Author: moka === gaoyuanfell@sina.com
  * @Date: 2019-03-08 15:11:42
- * @Last Modified by:   moka
- * @Last Modified time: 2019-03-08 15:11:42
+ * @Last Modified by: moka
+ * @Last Modified time: 2019-03-18 18:49:25
  */
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -19,6 +19,7 @@ import { MatModule } from '../mat-module';
 import { BounceInLeftComponent } from './prepare-route/bounce-in-left.component';
 import { MokaScrollComponent } from './moka-scroll/moka-scroll.component';
 import { FadeInOutComponent } from './prepare-route/fade-in-out.component';
+import { MokaRouterTabsComponent } from './moka-router-tabs/moka-router-tabs.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { FadeInOutComponent } from './prepare-route/fade-in-out.component';
     FadeInOutComponent,
     BounceInRightComponent,
     BounceInLeftComponent,
+    MokaRouterTabsComponent,
   ],
   imports: [
     CommonModule,
@@ -46,6 +48,7 @@ import { FadeInOutComponent } from './prepare-route/fade-in-out.component';
     FadeInOutComponent,
     BounceInRightComponent,
     BounceInLeftComponent,
+    MokaRouterTabsComponent,
   ]
 })
 export class CoreModule { }

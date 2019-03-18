@@ -80,8 +80,6 @@ export class TableComponent extends QueryComponent<any> implements OnInit {
   }
 
   trackBy(index, data){
-    console.info(index)
-    console.info(data)
     return data
   }
 

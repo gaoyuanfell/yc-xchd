@@ -35,8 +35,6 @@ export class StickyDirective implements OnInit {
   ngOnInit() {
     this._setupStickyStyler();
 
-    console.info(this._stickyStyler);
-
     setTimeout(() => {
       let trs = <HTMLElement>this.ref.nativeElement
       let stickyStartStates = []
@@ -47,7 +45,6 @@ export class StickyDirective implements OnInit {
     }, 150);
     // this._stickyStyler.stickRows([<HTMLElement>this.ref.nativeElement], [this.sticky], this.position)
 
-    // console.info(this.ref);
     // let stickyRef: HTMLElement = this.ref.nativeElement;
     // this.compileNode(stickyRef);
   }
@@ -68,7 +65,6 @@ export class StickyDirective implements OnInit {
     switch (nodeName) {
       case "TR":
         (<HTMLTableRowElement>node).childNodes.forEach(item => {
-          console.info(item);
           this.compileNode(item);
         });
         break;

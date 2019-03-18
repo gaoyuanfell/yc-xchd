@@ -5,17 +5,17 @@ export const routes: Routes = [
   {
     path: 'index',
     loadChildren : 'src/app/index/index.module#IndexModule',
-    data: { animation: "IndexModule" },
+    data: { animation: "IndexModule", title: 'index' },
   },
   {
     path: 'home',
     loadChildren : 'src/app/home/home.module#HomeModule',
-    data: { animation: "HomeModule" },
+    data: { animation: "HomeModule", title: 'home' },
   },
   {
     path: 'table',
     loadChildren : 'src/app/table/table.module#TableModule',
-    data: { animation: "TableModule" },
+    data: { animation: "TableModule", title: 'table' },
   }
 ];
 
