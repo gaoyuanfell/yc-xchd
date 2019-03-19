@@ -2,11 +2,12 @@
  * @Author: moka === gaoyuanfell@sina.com
  * @Date: 2019-03-08 15:09:34
  * @Last Modified by: moka
- * @Last Modified time: 2019-03-08 17:36:29
+ * @Last Modified time: 2019-03-19 16:46:54
  */
-import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild } from "@angular/core";
-import { MatDialog, MatDialogRef } from "@angular/material";
+import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild, Host, Optional, Inject, forwardRef } from "@angular/core";
+import { MatDialog, MatDialogRef, MatSidenav, MatDrawerContainer, MatSidenavContent, MatDrawer } from "@angular/material";
 import { QueryComponent } from "../core/query.component";
+import { MokaScrollComponent } from '../core/moka-scroll/moka-scroll.component';
 
 export interface Dessert {
   calories: number;

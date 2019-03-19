@@ -4,7 +4,8 @@ import {
   OnInit,
   OnDestroy,
   AfterContentInit,
-  ContentChild
+  ContentChild,
+  ChangeDetectionStrategy
 } from "@angular/core";
 import { Router, NavigationEnd } from "@angular/router";
 import { Subject } from "rxjs";
@@ -16,6 +17,7 @@ import { MokaMenuComponent } from "./moka-menu.component";
   template: `
     <ng-content></ng-content>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
 })
 export class MokaMenuAccordionComponent
@@ -39,7 +41,7 @@ export class MokaMenuAccordionComponent
         takeUntil(this.ngUnsubscribe)
       )
       .subscribe((event: NavigationEnd) => {
-        this._menu.setAvtiveUrl(event.urlAfterRedirects);
+        this._menu.setAvtiveUrl(event.url);
       });
   }
 

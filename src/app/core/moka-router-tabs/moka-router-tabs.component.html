@@ -1,3 +1,6 @@
-<p>
-  moka-router-tabs works!
-</p>
+<div class="router-tabs">
+  <div mat-ripple class="item" *ngFor="let item of cache;let index = index"  [routerLink]="[item.url]" (click)="go(item.url)">
+    <span class="text">{{item.url}}</span>
+    <i class="close" (click)="remove($event,index)">X</i>
+  </div>
+</div>

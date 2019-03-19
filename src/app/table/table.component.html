@@ -17,8 +17,8 @@
 
         <button mat-stroked-button (click)="test()">Basic</button>
         <button mat-stroked-button color="primary" (click)="open()">Primary</button>
-        <button mat-stroked-button color="accent">Accent</button>
-        <button mat-stroked-button color="warn">Warn</button>
+        <button mat-stroked-button color="accent" [routerLink]="['test']">Accent</button>
+        <button mat-stroked-button color="warn" (click)="fullScreen()">Warn</button>
       </div>
     </div>
 
@@ -208,6 +208,10 @@
   </moka-scroll>
 </ng-template>
 
-<moka-fade-in-out [outlet]="outlet">
+
+<moka-bounce-in-right [outlet]="outlet">
   <router-outlet #outlet="outlet"></router-outlet>
-</moka-fade-in-out>
+</moka-bounce-in-right>
+<!-- <moka-fade-in-out [outlet]="outlet">
+
+</moka-fade-in-out> -->

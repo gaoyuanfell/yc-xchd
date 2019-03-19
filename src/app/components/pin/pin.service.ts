@@ -1,13 +1,13 @@
 /*
  * @Author: moka === gaoyuanfell@sina.com
  * @Date: 2019-03-08 15:12:01
- * @Last Modified by:   moka
- * @Last Modified time: 2019-03-08 15:12:01
+ * @Last Modified by: moka
+ * @Last Modified time: 2019-03-19 19:11:29
  */
 import { Injectable } from "@angular/core";
 import { PinDirective } from "./pin.directive";
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class PinService {
   constructor() {}
 

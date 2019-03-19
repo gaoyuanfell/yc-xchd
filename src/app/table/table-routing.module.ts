@@ -7,10 +7,12 @@ const routes: Routes = [
   {
     path: '',
     component: TableComponent,
+    data: { animation: "TableModule", title: 'table' },
     children:[
       {
         path: 'test',
-        component: TestComponent
+        component: TestComponent,
+        data: { animation: "TestComponent", title: 'test' },
       }
     ]
   }

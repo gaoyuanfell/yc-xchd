@@ -1,18 +1,23 @@
 /*
  * @Author: moka === gaoyuanfell@sina.com
  * @Date: 2019-03-08 15:11:45
- * @Last Modified by:   moka
- * @Last Modified time: 2019-03-08 15:11:45
+ * @Last Modified by: moka
+ * @Last Modified time: 2019-03-19 17:43:51
  */
 import { SelectionModel } from "@angular/cdk/collections";
-import { MatPaginator, MatSort, Sort, PageEvent } from "@angular/material";
-import { ViewChild, Injector } from "@angular/core";
+import { MatPaginator, MatSort, Sort, PageEvent, MatSidenav, MatSidenavContent, MatSidenavContainer } from "@angular/material";
+import { ViewChild, Injector, forwardRef, Inject, Optional, Host, InjectFlags } from "@angular/core";
 import { AutoCookie } from "./decorator/decorator";
 import { PinService } from "../components/pin/pin.service";
+import { PinDirective } from '../components/pin/pin.directive';
+import { MokaScrollComponent } from './moka-scroll/moka-scroll.component';
+import { MokaFullScreenComponent } from './moka-full-screen/moka-full-screen.component';
 
 export abstract class QueryComponent<T> {
   protected constructor(public injector: Injector) {
     this._pinService = injector.get(PinService);
+    this.matSidenavContent = injector.get(MatSidenavContent, undefined, InjectFlags.Host);
+    // matSidenavContent._container.close()
   }
 
   private _pinService: PinService;
@@ -78,5 +83,16 @@ export abstract class QueryComponent<T> {
     this.query.pageSize = page.pageSize;
     this.query.pageIndex = page.pageIndex;
     this.search();
+  }
+
+  /**
+   * 全屏
+   */
+  private matSidenavContent: MatSidenavContent;
+
+  fullScreen(){
+    let mokaFullScreenComponent = this.injector.get( MokaFullScreenComponent )
+    mokaFullScreenComponent.toggle()
+    mokaFullScreenComponent.opend ? this.matSidenavContent._container.close() : this.matSidenavContent._container.open()
   }
 }

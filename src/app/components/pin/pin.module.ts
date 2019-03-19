@@ -18,9 +18,6 @@ import { PinService } from './pin.service';
   ],
   exports:[
     PinDirective
-  ],
-  providers:[
-    PinService
   ]
 })
 export class PinModule { }

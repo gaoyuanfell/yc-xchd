@@ -1,24 +1,17 @@
 /*
  * @Author: moka === gaoyuanfell@sina.com
  * @Date: 2019-03-08 15:11:23
- * @Last Modified by:   moka
- * @Last Modified time: 2019-03-08 15:11:23
+ * @Last Modified by: moka
+ * @Last Modified time: 2019-03-19 09:58:18
  */
-import { Component, OnInit, Input, ViewEncapsulation, ChangeDetectionStrategy } from "@angular/core";
-import {
-  trigger,
-  state,
-  style,
-  transition,
-  animate
-} from "@angular/animations";
+import { animate, state, style, transition, trigger } from "@angular/animations";
+import { Component, Input, OnInit, ViewEncapsulation } from "@angular/core";
 import { Router } from "@angular/router";
 
 @Component({
   selector: "moka-menu",
   templateUrl: "./moka-menu.component.html",
   styleUrls: ["./moka-menu.component.less"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
     "[attr.class]": '"menu"',
@@ -36,6 +29,7 @@ import { Router } from "@angular/router";
   ]
 })
 export class MokaMenuComponent implements OnInit {
+
   @Input("list") list;
 
   private defaultProps: any = {
@@ -65,12 +59,13 @@ export class MokaMenuComponent implements OnInit {
   }
 
   setAvtiveUrl(url) {
-    this.list.forEach(element => {
+    for (let index = 0; index < this.list.length; index++) {
+      const element = this.list[index];
       this.defaultChildren(element);
       let bo = this.isUrlInChildren(element, url);
       element._childExpanded = bo;
       if (bo) this.activeItem = element;
-    });
+    }
   }
 
   isUrlInChildren(parent, url) {
@@ -111,7 +106,6 @@ export class MokaMenuComponent implements OnInit {
 
   menuClick(event: Event, item) {
     event.stopPropagation();
-
     if (this.activeItem !== item) {
       this.list.forEach(element => {
         let child = element[this.useProps.child];
@@ -131,7 +125,9 @@ export class MokaMenuComponent implements OnInit {
     this.router.navigateByUrl(link);
   }
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+
+  }
 
   ngOnInit() {}
 }

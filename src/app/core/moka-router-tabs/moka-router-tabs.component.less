@@ -1,0 +1,55 @@
+.router-tabs {
+  display: flex;
+  background: #fff;
+  transform: translate(0, 0);
+  border-bottom: 1px solid #ccc;
+
+  .item {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: 8px;
+    padding-right: 0;
+    background: #fff;
+    max-width: 120px;
+    outline: none;
+    cursor: pointer;
+    min-width: 70px;
+    user-select: none;
+    border-right: 1px solid #ccc;
+    position: relative;
+    &:last-child {
+      border-right: none;
+    }
+
+    &:hover {
+      .close {
+        display: block;
+      }
+    }
+
+    .text {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 100%;
+    }
+
+    .close {
+      right: 0px;
+      font-size: 12px;
+      border-radius: 50%;
+      border: 1px solid #666;
+      display: none;
+      width: 16px;
+      min-width: 16px;
+      height: 16px;
+      line-height: 1;
+      color: #666;
+      display: none;
+      margin-right: 6px;
+      padding: 1px;
+      text-align: center;
+    }
+  }
+}
