@@ -2,9 +2,9 @@
  * @Author: moka === gaoyuanfell@sina.com
  * @Date: 2019-03-08 15:09:34
  * @Last Modified by: moka
- * @Last Modified time: 2019-03-19 16:46:54
+ * @Last Modified time: 2019-03-21 10:42:10
  */
-import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild, Host, Optional, Inject, forwardRef } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild, Host, Optional, Inject, forwardRef, ChangeDetectorRef } from "@angular/core";
 import { MatDialog, MatDialogRef, MatSidenav, MatDrawerContainer, MatSidenavContent, MatDrawer } from "@angular/material";
 import { QueryComponent } from "../core/query.component";
 import { MokaScrollComponent } from '../core/moka-scroll/moka-scroll.component';
@@ -29,7 +29,7 @@ export interface Food {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TableComponent extends QueryComponent<any> implements OnInit {
-  constructor(public injector: Injector, private matDialog: MatDialog) {
+  constructor(public injector: Injector, private matDialog: MatDialog, private changeDetectorRef: ChangeDetectorRef) {
     super(injector);
     this.tableList = this.data
   }

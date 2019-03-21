@@ -1,7 +1,12 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, Renderer2, ViewEncapsulation, Input } from '@angular/core';
-import { PinService } from 'src/app/components/pin/pin.service';
+/*
+ * @Author: moka === gaoyuanfell@sina.com
+ * @Date: 2019-03-20 09:28:03
+ * @Last Modified by: moka
+ * @Last Modified time: 2019-03-20 18:04:32
+ */
+import { AfterContentInit, AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnInit, Renderer2, ViewEncapsulation, AfterContentChecked } from '@angular/core';
 import { MatSidenav } from '@angular/material';
+import { RetainService } from 'src/app/components/retain/retain.service';
 
 @Component({
   selector: 'moka-full-screen',
@@ -17,18 +22,6 @@ import { MatSidenav } from '@angular/material';
     }
     `
   ],
-  animations:[
-    trigger('openClose', [
-      state('open', style({
-        top: 0,
-        left: 0
-      })),
-      state('close', style({})),
-      transition('close <=> open', [
-        animate('400ms cubic-bezier(0.25, 0.8, 0.25, 1)')
-      ]),
-    ])
-  ],
   host:{
     '[attr.class]':'"moka-full-screen"',
   },
@@ -41,15 +34,11 @@ export class MokaFullScreenComponent implements OnInit, AfterContentInit {
   open(){
     this.addStyle({top: 0, left: 0})
     this._opend = true;
-    this.pinService.subscribe()
-    this.changeDetectorRef.markForCheck()
   }
 
   close(){
     this.addStyle(this.bcrt)
     this._opend = false;
-    this.pinService.subscribe()
-    this.changeDetectorRef.markForCheck()
   }
 
   toggle(){
@@ -68,17 +57,12 @@ export class MokaFullScreenComponent implements OnInit, AfterContentInit {
     }
   }
 
-  removeStyle(bcrt){
-
-  }
-
   private _drawer:MatSidenav
   @Input('drawer') set drawer(val: MatSidenav){
     this._drawer = val;
     if(this._drawer){
-      this._drawer.openedChange.subscribe(()=> {
-        console.info('ok')
-        this.pinService.subscribe()
+      this._drawer.openedChange.subscribe((event)=> {
+        this.retainService.subscribe()
       })
     }
   }
@@ -89,7 +73,7 @@ export class MokaFullScreenComponent implements OnInit, AfterContentInit {
 
   bcrt
 
-  constructor(private changeDetectorRef: ChangeDetectorRef, private ref: ElementRef, private renderer: Renderer2, private pinService:PinService) {
+  constructor(private changeDetectorRef: ChangeDetectorRef, private ref: ElementRef, private renderer: Renderer2, private retainService:RetainService) {
 
   }
 
@@ -105,7 +89,4 @@ export class MokaFullScreenComponent implements OnInit, AfterContentInit {
     }
     this.addStyle(this.bcrt)
   }
-
-
-
 }

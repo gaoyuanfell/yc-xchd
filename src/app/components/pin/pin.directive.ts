@@ -2,19 +2,18 @@
  * @Author: moka === gaoyuanfell@sina.com
  * @Date: 2019-03-08 15:11:56
  * @Last Modified by: moka
- * @Last Modified time: 2019-03-19 16:38:00
+ * @Last Modified time: 2019-03-21 11:13:29
  */
-import { AfterContentInit, Directive, ElementRef, Host, Input, OnDestroy, OnInit, Optional, Renderer2, AfterViewChecked } from "@angular/core";
-import { fromEvent, Subscription } from "rxjs";
-import { debounceTime, map } from "rxjs/operators";
+import { AfterViewChecked, Directive, ElementRef, Host, Input, OnDestroy, OnInit, Optional, Renderer2, ChangeDetectorRef, AfterContentChecked, NgZone } from "@angular/core";
+import { fromEvent, Subject } from "rxjs";
+import { debounceTime, map, takeUntil } from "rxjs/operators";
 import { MokaScrollComponent } from "src/app/core/moka-scroll/moka-scroll.component";
-import { PinService } from "./pin.service";
+import { RetainDirective } from '../retain/retain.directive';
 
 @Directive({
   selector: "[pin]"
 })
 export class PinDirective implements OnInit, OnDestroy, AfterViewChecked {
-
   @Input() set scroll(val) {
     this._scroll = val;
   }
@@ -41,18 +40,20 @@ export class PinDirective implements OnInit, OnDestroy, AfterViewChecked {
 
   constructor(
     @Host() @Optional() private _mokaScrollComponent: MokaScrollComponent,
-    private ref: ElementRef,
+    @Host() @Optional() private retainDirective: RetainDirective,
+    private changeDetectorRef: ChangeDetectorRef,
+    public ref: ElementRef,
     private renderer: Renderer2,
-    private pinService: PinService
   ) {
-    pinService.add(this);
+    this.ngUnsubscribe = new Subject<any>()
+    this.retainDirective.pinDirectives.push(this)
   }
 
   time = 150;
 
   avatarBox;
 
-  private isInitAvatarBox:boolean = true
+  private isInitAvatarBox = false
   initAvatarBox() {
     if (!this._mokaScrollComponent) return;
     if (!this.avatarBox) {
@@ -76,9 +77,10 @@ export class PinDirective implements OnInit, OnDestroy, AfterViewChecked {
   subscribeChange() {
     if (!this.avatarBox) return;
     this.subscribeDefChange = true;
+    // this.changeDetectorRef.markForCheck()
   }
 
-  implementSubscribeChange(){
+  implementSubscribeChange() {
     this.originalScrollTop = this._mokaScrollComponent.ref.nativeElement.scrollTop;
     this.removeStyle();
     this.originalBcrt = this.ref.nativeElement.getBoundingClientRect();
@@ -105,38 +107,31 @@ export class PinDirective implements OnInit, OnDestroy, AfterViewChecked {
   originalAttachBcrt: ClientRect | DOMRect;
   scrollTop;
   originalScrollTop = 0;
-  resizeEventA: Subscription;
-  resizeEventB: Subscription;
-  resizeEventC: Subscription;
+
+  private ngUnsubscribe: Subject<any>;
 
   ngOnInit() {
-    this.resizeEventA = fromEvent(
+    this.isInitAvatarBox = true;
+    fromEvent(
       this._mokaScrollComponent.ref.nativeElement,
       "scroll"
     )
-      .pipe(map((event: any) => event.target.scrollTop))
+      .pipe(map((event: any) => event.target.scrollTop), takeUntil(this.ngUnsubscribe))
       .subscribe(scrollTop => {
         if (!this.originalBcrt) return;
         this.scrollTop = scrollTop;
         this.position(scrollTop);
       });
-    let resizeEvent = fromEvent(window, "resize");
-    this.resizeEventB = resizeEvent.subscribe(() => {
-      this.position(this.scrollTop || 0);
-    });
-    this.resizeEventC = resizeEvent.pipe(debounceTime(100)).subscribe(() => {
-      this.subscribeChange();
-    });
   }
 
   ngAfterViewChecked() {
-    if(this.isInitAvatarBox){
-      this.initAvatarBox();
+    if (this.isInitAvatarBox) {
       this.isInitAvatarBox = false;
+      this.initAvatarBox();
     }
-    if(this.subscribeDefChange){
-      this.implementSubscribeChange()
+    if (this.subscribeDefChange) {
       this.subscribeDefChange = false;
+      this.implementSubscribeChange()
     }
   }
 
@@ -162,7 +157,7 @@ export class PinDirective implements OnInit, OnDestroy, AfterViewChecked {
         this.ref.nativeElement,
         "top",
         `${scrollTop -
-          (this.originalBcrt.top + this.originalScrollTop - top)}px`
+        (this.originalBcrt.top + this.originalScrollTop - top)}px`
       );
     } else {
       this.renderer.removeStyle(this.ref.nativeElement, "top");
@@ -185,8 +180,8 @@ export class PinDirective implements OnInit, OnDestroy, AfterViewChecked {
         this.ref.nativeElement,
         "bottom",
         `${this.originalBcrt.bottom +
-          this.originalScrollTop -
-          (bottom + scrollTop)}px`
+        this.originalScrollTop -
+        (bottom + scrollTop)}px`
       );
     } else {
       this.renderer.removeStyle(this.ref.nativeElement, "bottom");
@@ -199,9 +194,8 @@ export class PinDirective implements OnInit, OnDestroy, AfterViewChecked {
     this.originalAttachBcrt = undefined;
     this.scrollTop = 0;
     this.originalScrollTop = 0;
-    this.pinService.remove(this);
-    this.resizeEventA && this.resizeEventA.unsubscribe();
-    this.resizeEventB && this.resizeEventB.unsubscribe();
-    this.resizeEventC && this.resizeEventC.unsubscribe();
+
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

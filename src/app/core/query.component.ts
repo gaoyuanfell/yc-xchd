@@ -2,25 +2,24 @@
  * @Author: moka === gaoyuanfell@sina.com
  * @Date: 2019-03-08 15:11:45
  * @Last Modified by: moka
- * @Last Modified time: 2019-03-19 17:43:51
+ * @Last Modified time: 2019-03-20 16:38:02
  */
 import { SelectionModel } from "@angular/cdk/collections";
-import { MatPaginator, MatSort, Sort, PageEvent, MatSidenav, MatSidenavContent, MatSidenavContainer } from "@angular/material";
-import { ViewChild, Injector, forwardRef, Inject, Optional, Host, InjectFlags } from "@angular/core";
+import { InjectFlags, Injector, ViewChild } from "@angular/core";
+import { MatPaginator, MatSidenavContent, MatSort, PageEvent, Sort } from "@angular/material";
 import { AutoCookie } from "./decorator/decorator";
-import { PinService } from "../components/pin/pin.service";
-import { PinDirective } from '../components/pin/pin.directive';
-import { MokaScrollComponent } from './moka-scroll/moka-scroll.component';
 import { MokaFullScreenComponent } from './moka-full-screen/moka-full-screen.component';
+import { RetainService } from '../components/retain/retain.service';
 
 export abstract class QueryComponent<T> {
   protected constructor(public injector: Injector) {
-    this._pinService = injector.get(PinService);
+    this._retainService = injector.get(RetainService);
     this.matSidenavContent = injector.get(MatSidenavContent, undefined, InjectFlags.Host);
-    // matSidenavContent._container.close()
   }
 
-  private _pinService: PinService;
+  // ----------------- 分页 start--------------------------
+
+  private _retainService: RetainService;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
@@ -28,7 +27,7 @@ export abstract class QueryComponent<T> {
 
   set tableList(data: T[]) {
     this._tableList = data;
-    this._pinService.subscribe();
+    this._retainService.subscribe()
   }
 
   get tableList(): T[] {
@@ -67,11 +66,19 @@ export abstract class QueryComponent<T> {
     return this.selection.hasValue() && this.isAllSelected();
   }
 
-  /**
-   * @description
-   * 必须实现
-   */
-  abstract search(): void;
+  selectionChange(event, item){
+    if(event){
+      this.selection.toggle(item)
+    }
+  }
+
+  selectionChecked(item){
+    this.selection.isSelected(item)
+  }
+
+  selectionClick(event){
+    event.stopPropagation()
+  }
 
   sortData(sort: Sort) {
     this.query.active = sort.active;
@@ -86,10 +93,17 @@ export abstract class QueryComponent<T> {
   }
 
   /**
+   * @description
+   * 必须实现
+   */
+  abstract search(): void;
+
+  // ----------------- 分页 end--------------------------
+
+  /**
    * 全屏
    */
   private matSidenavContent: MatSidenavContent;
-
   fullScreen(){
     let mokaFullScreenComponent = this.injector.get( MokaFullScreenComponent )
     mokaFullScreenComponent.toggle()

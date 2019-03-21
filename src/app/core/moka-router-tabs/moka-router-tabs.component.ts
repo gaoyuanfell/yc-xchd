@@ -59,7 +59,6 @@ export class MokaRouterTabsComponent implements OnInit {
       mousemove.pipe(takeUntil(mouseout), takeUntil(mouseup), map((event:MouseEvent) => {return {x:event.x, y: event.y}})).subscribe(xy2 => {
         let x = xy2.x - startX
         let y = xy2.y - startY
-        console.info(x)
       })
     })
   }
