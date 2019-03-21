@@ -6,10 +6,8 @@
  */
 import { PinModule } from './pin/pin.module';
 import { StickyModule } from './sticky/sticky.module';
-import { RetainModule } from './retain/retain.module';
 
 export {
   PinModule,
   StickyModule,
-  RetainModule,
 }

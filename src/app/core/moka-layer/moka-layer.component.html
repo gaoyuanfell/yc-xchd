@@ -1,7 +1,7 @@
 <moka-header class="moka-header">
   <mat-toolbar>
     <mat-toolbar-row>
-      <h1 (click)="drawer.toggle()">佛光普照</h1>
+      <h1 (click)="drawer.toggle()">佛光普照-南无阿弥陀佛</h1>
     </mat-toolbar-row>
   </mat-toolbar>
 </moka-header>
@@ -9,12 +9,9 @@
 <moka-full-screen [drawer]="drawer">
   <mat-sidenav-container>
     <mat-sidenav mode="side" opened #drawer>
-      <moka-sidenav class="moka-sidenav">
-        <moka-menu-accordion>
-          <moka-menu [expanded]="true" [list]="menuList" [props]="{icon:'leftIcon',route:'href', child:'children', name:'name'}"></moka-menu>
-        </moka-menu-accordion>
-
-      </moka-sidenav>
+      <moka-menu-accordion>
+        <moka-menu [expanded]="true" [list]="menuList" [props]="{icon:'leftIcon',route:'href', child:'children', name:'name'}"></moka-menu>
+      </moka-menu-accordion>
     </mat-sidenav>
     <mat-sidenav-content>
       <app-moka-router-tabs></app-moka-router-tabs>

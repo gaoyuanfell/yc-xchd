@@ -1,7 +1,7 @@
 import { Direction } from '@angular/cdk/bidi';
 import { StickyStyler } from '@angular/cdk/table';
 import { MokaScrollComponent } from 'src/app/core/moka-scroll/moka-scroll.component';
-import { RetainDirective } from '../retain/retain.directive';
+import { MokaTableComponent } from 'src/app/core/moka-table/moka-table.component';
 
 export class MokaStickyStyler extends StickyStyler {
 
@@ -14,7 +14,7 @@ export class MokaStickyStyler extends StickyStyler {
     stickCellCss: string,
     direction: Direction,
     isBrowser = true,
-    private retainDirective: RetainDirective,
+    private mokaTableComponent: MokaTableComponent,
     private mokaScrollComponent: MokaScrollComponent) {
     super(isNativeHtmlTable, stickCellCss, direction, isBrowser)
     this.moka_isNativeHtmlTable = isNativeHtmlTable
@@ -143,7 +143,7 @@ export class MokaStickyStyler extends StickyStyler {
   }
 
   get stickyHeightTop() {
-    let pinList = this.retainDirective.pinDirectives;
+    let pinList = this.mokaTableComponent.pinDirectives;
     if (!pinList.length) return 0
     let list = pinList.filter(p => p.direction === 'top').map(p => p.ref.nativeElement.clientHeight);
     if (!list.length) return 0
@@ -151,7 +151,7 @@ export class MokaStickyStyler extends StickyStyler {
   }
 
   get stickyHeightBottom() {
-    let pinList = this.retainDirective.pinDirectives;
+    let pinList = this.mokaTableComponent.pinDirectives;
     if (!pinList.length) return 0
     let list = pinList.filter(p => p.direction === 'bottom').map(p => p.ref.nativeElement.clientHeight);
     if (!list.length) return 0

@@ -17,6 +17,9 @@ import { MokaMenuComponent } from "./moka-menu.component";
   template: `
     <ng-content></ng-content>
   `,
+  host:{
+    '[attr.class]':'"moka-menu-accordion"'
+  },
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
 })

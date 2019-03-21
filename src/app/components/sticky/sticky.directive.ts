@@ -2,26 +2,26 @@
  * @Author: moka === gaoyuanfell@sina.com
  * @Date: 2019-03-08 15:13:45
  * @Last Modified by: moka
- * @Last Modified time: 2019-03-21 11:33:46
+ * @Last Modified time: 2019-03-21 16:20:13
  */
-import { Directive, OnInit, ElementRef, Optional, Inject, Input, AfterViewChecked, AfterViewInit, Host, ChangeDetectorRef } from "@angular/core";
-import { Directionality, Direction } from "@angular/cdk/bidi";
-import { DOCUMENT } from "@angular/common";
+import { Direction, Directionality } from "@angular/cdk/bidi";
 import { Platform } from "@angular/cdk/platform";
-import { MokaStickyStyler } from './moka-sticky-styler';
-import { RetainDirective } from '../retain/retain.directive';
-import { MokaScrollComponent } from 'src/app/core/moka-scroll/moka-scroll.component';
+import { DOCUMENT } from "@angular/common";
+import { AfterViewChecked, ChangeDetectorRef, Directive, ElementRef, Host, Inject, Input, OnInit, Optional } from "@angular/core";
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { MokaScrollComponent } from 'src/app/core/moka-scroll/moka-scroll.component';
+import { MokaTableComponent } from 'src/app/core/moka-table/moka-table.component';
+import { MokaStickyStyler } from './moka-sticky-styler';
 
 @Directive({
   selector: "[sticky]"
 })
-export class StickyDirective implements OnInit, AfterViewChecked, AfterViewInit {
+export class StickyDirective implements OnInit, AfterViewChecked {
 
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
-    @Host() @Optional() private retainDirective: RetainDirective,
+    @Host() @Optional() private mokaTableComponent: MokaTableComponent,
     @Host() @Optional() private mokaScrollComponent: MokaScrollComponent,
     private ref: ElementRef,
     @Optional() protected readonly _dir: Directionality,
@@ -33,7 +33,7 @@ export class StickyDirective implements OnInit, AfterViewChecked, AfterViewInit 
     @Inject(DOCUMENT) _document?: any,
     private _platform?: Platform,
   ) {
-    this.retainDirective.stickyDirectives.push(this)
+    this.mokaTableComponent.stickyDirectives.push(this)
   }
 
   @Input('sticky') sticky: boolean
@@ -43,14 +43,10 @@ export class StickyDirective implements OnInit, AfterViewChecked, AfterViewInit 
   protected stickyCssClass: string = "moka-table-sticky";
 
   ngOnInit() {
-    this.subscribeDef.pipe(debounceTime(100)).subscribe(()=> {
+    this.subscribeDef.pipe(debounceTime(0)).subscribe(()=> {
       this.subscribeDefChange = true;
       this.changeDetectorRef.markForCheck()
     })
-  }
-
-  ngAfterViewInit() {
-
   }
 
   private _setupStickyStyler() {
@@ -62,7 +58,7 @@ export class StickyDirective implements OnInit, AfterViewChecked, AfterViewInit 
       direction,
       // @breaking-change 8.0.0 remove the null check for `this._platform`.
       this._platform ? this._platform.isBrowser : true,
-      this.retainDirective,
+      this.mokaTableComponent,
       this.mokaScrollComponent,
     );
   }
@@ -94,6 +90,7 @@ export class StickyDirective implements OnInit, AfterViewChecked, AfterViewInit 
 
   ngAfterViewChecked() {
     if(this.subscribeDefChange){
+      // console.info('bb')
       this.subscribeDefChange = false;
       this._setupStickyStyler();
       this.implementSubscribeChange();

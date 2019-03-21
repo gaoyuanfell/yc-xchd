@@ -2,24 +2,24 @@
  * @Author: moka === gaoyuanfell@sina.com
  * @Date: 2019-03-08 15:11:45
  * @Last Modified by: moka
- * @Last Modified time: 2019-03-20 16:38:02
+ * @Last Modified time: 2019-03-21 14:31:44
  */
 import { SelectionModel } from "@angular/cdk/collections";
 import { InjectFlags, Injector, ViewChild } from "@angular/core";
 import { MatPaginator, MatSidenavContent, MatSort, PageEvent, Sort } from "@angular/material";
 import { AutoCookie } from "./decorator/decorator";
 import { MokaFullScreenComponent } from './moka-full-screen/moka-full-screen.component';
-import { RetainService } from '../components/retain/retain.service';
+import { MokaTableService } from './moka-table/moka-table.service';
 
 export abstract class QueryComponent<T> {
   protected constructor(public injector: Injector) {
-    this._retainService = injector.get(RetainService);
+    this._mokaTableService = injector.get(MokaTableService);
     this.matSidenavContent = injector.get(MatSidenavContent, undefined, InjectFlags.Host);
   }
 
   // ----------------- 分页 start--------------------------
 
-  private _retainService: RetainService;
+  private _mokaTableService: MokaTableService;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
@@ -27,7 +27,7 @@ export abstract class QueryComponent<T> {
 
   set tableList(data: T[]) {
     this._tableList = data;
-    this._retainService.subscribe()
+    this._mokaTableService.subscribe()
   }
 
   get tableList(): T[] {
@@ -52,7 +52,8 @@ export abstract class QueryComponent<T> {
     return numSelected === numRows;
   }
 
-  masterToggle() {
+  masterToggle(event) {
+    if(!event) return;
     this.isAllSelected()
       ? this.selection.clear()
       : this.tableList.forEach(row => this.selection.select(row));
@@ -66,14 +67,14 @@ export abstract class QueryComponent<T> {
     return this.selection.hasValue() && this.isAllSelected();
   }
 
-  selectionChange(event, item){
+  selectionToggle(event, item){
     if(event){
       this.selection.toggle(item)
     }
   }
 
-  selectionChecked(item){
-    this.selection.isSelected(item)
+  selectionIsSelected(item){
+    return this.selection.isSelected(item)
   }
 
   selectionClick(event){

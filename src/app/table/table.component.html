@@ -1,137 +1,30 @@
 <moka-scroll>
-  <moka-modal style="min-width: 1200px;" retain>
-    <div class="query-tool">
-      <div class="left-tool">
-        <h2>标题</h2>
-      </div>
-      <div class="right-tool">
+  <moka-modal style="min-width: 1200px;">
 
-        <mat-slide-toggle [(ngModel)]="query.test3">Slide me! {{query.test3}}</mat-slide-toggle>
-
-        <button mat-stroked-button [matMenuTriggerFor]="animals">Menu ===</button>
-
-        <mat-menu #animals="matMenu">
-          <button mat-menu-item>Vertebrates</button>
-          <button mat-menu-item>Invertebrates</button>
-        </mat-menu>
-
-        <button mat-stroked-button (click)="test()">Basic</button>
-        <button mat-stroked-button color="primary" (click)="open()">Primary</button>
-        <button mat-stroked-button color="accent" [routerLink]="['test']">Accent</button>
-        <button mat-stroked-button color="warn" (click)="fullScreen()">Warn</button>
-      </div>
-    </div>
-
-    <!--  pin -->
-    <div pin class="query-tool">
-      <div class="left-tool">
-        <mat-form-field>
-          <mat-select placeholder="Toppings" multiple>
-            <mat-option [value]="'topping'">topping</mat-option>
-            <mat-option [value]="'Extra cheese'">Extra cheese</mat-option>
-            <mat-option [value]="'Mushroom'">Mushroom</mat-option>
-            <mat-option [value]="'Onion'">Onion</mat-option>
-            <mat-option [value]="'Pepperoni'">Pepperoni</mat-option>
-            <mat-option [value]="'Sausage'">Sausage</mat-option>
-            <mat-option [value]="'Tomato'">Tomato</mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <mat-form-field>
-          <mat-select placeholder="Favorite food" [(ngModel)]="query.test1" name="test1">
-            <mat-option *ngFor="let food of foods" [value]="food.value">
-              {{food.viewValue}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-
-      </div>
-      <div class="right-tool">
-
-        <mat-form-field class="example-full-width">
-          <input matInput [matDatepicker]="picker" (click)="picker.open()" placeholder="Choose a date">
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-
-        <mat-form-field>
-          <input matInput placeholder="Favorite food" [(ngModel)]="query.test2" name="test2">
-          <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="query.test2 = ''">
-            <mat-icon>X</mat-icon>
-          </button>
-        </mat-form-field>
-      </div>
-    </div>
-
-    <table moka-table style="position: relative;" class="mat-table" matSort (matSortChange)="sortData($event)">
-      <thead>
-        <!-- [sticky]="true" [position]="'top'" -->
-        <tr [sticky]="true" [position]="'top'" class="mat-header-row">
-          <th stickyStart class="mat-header-cell">
-            <mat-checkbox (change)="masterToggle()" [checked]="checked()" [indeterminate]="indeterminate()"></mat-checkbox>
-          </th>
-          <th stickyStart class="mat-header-cell" mat-sort-header="name">Dessert (100g)</th>
-          <th class="mat-header-cell" mat-sort-header="calories">Calories</th>
-          <th class="mat-header-cell" mat-sort-header="fat">Fat (g)</th>
-          <th class="mat-header-cell" mat-sort-header="carbs">Carbs (g)</th>
-          <th class="mat-header-cell" mat-sort-header="protein">Protein (g)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr [sticky]="true" [position]="'left'" class="mat-row" *ngFor="let item of tableList">
-          <td stickyStart class="mat-cell">
-            <mat-checkbox (click)="selectionClick($event)" (change)="selectionChange($event, item)" [checked]="selectionChecked(item)"> </mat-checkbox>
-          </td>
-          <td stickyStart class="mat-cell">{{item.name}}</td>
-          <td class="mat-cell">{{item.calories}}</td>
-          <td class="mat-cell">{{item.fat}}</td>
-          <td class="mat-cell">{{item.carbs}}</td>
-          <td class="mat-cell">{{item.protein}}</td>
-        </tr>
-      </tbody>
-      <tfoot>
-        <!--  [sticky]="true" [position]="'bottom'" -->
-        <tr [sticky]="true" [position]="'bottom'" class="mat-footer-row">
-          <td stickyStart class="mat-footer-cell"> </td>
-          <td stickyStart class="mat-footer-cell"> Total </td>
-          <td class="mat-footer-cell"> </td>
-          <td class="mat-footer-cell"> </td>
-          <td class="mat-footer-cell"> </td>
-          <td class="mat-footer-cell"> 100 </td>
-        </tr>
-      </tfoot>
-    </table>
-    <!-- pin [direction]="'bottom'" -->
-    <div pin [direction]="'bottom'">
-      <mat-paginator [pageSizeOptions]="pageSizeList" [pageSize]="query.pageSize" [pageIndex]="query.pageIndex" [length]="pageTotal" showFirstLastButtons (page)="page($event)"></mat-paginator>
-    </div>
-  </moka-modal>
-</moka-scroll>
-
-<ng-template #aaa>
-  <moka-scroll style="height:60vh;">
-    <moka-modal retain>
+    <moka-table>
       <div class="query-tool">
-          <div class="left-tool">
-            <h2>标题</h2>
-          </div>
-          <div class="right-tool">
+        <div class="left-tool">
+          <h2>标题</h2>
+        </div>
+        <div class="right-tool">
 
-            <mat-slide-toggle [(ngModel)]="query.test3">Slide me! {{query.test3}}</mat-slide-toggle>
+          <mat-slide-toggle [(ngModel)]="query.test3">滑动开关</mat-slide-toggle>
 
-            <button mat-stroked-button [matMenuTriggerFor]="animals">Menu ===</button>
+          <button mat-stroked-button [matMenuTriggerFor]="animals">菜单</button>
+          <mat-menu #animals="matMenu">
+            <button mat-menu-item>Vertebrates</button>
+            <button mat-menu-item>Invertebrates</button>
+          </mat-menu>
 
-            <mat-menu #animals="matMenu">
-              <button mat-menu-item>Vertebrates</button>
-              <button mat-menu-item>Invertebrates</button>
-            </mat-menu>
-
-            <button mat-stroked-button (click)="test()">Basic</button>
-            <button mat-stroked-button color="primary">Primary</button>
-            <button mat-stroked-button color="accent">Accent</button>
-            <button mat-stroked-button color="warn">Warn</button>
-          </div>
+          <button mat-stroked-button (click)="test()">增加</button>
+          <button mat-stroked-button color="primary" (click)="open()">弹框</button>
+          <!-- <button mat-stroked-button color="accent" [routerLink]="['test']"></button> -->
+          <button mat-stroked-button color="warn" (click)="fullScreen()">全屏</button>
+        </div>
       </div>
-      <div class="query-tool" pin>
+
+      <!--  pin -->
+      <div pin class="query-tool">
         <div class="left-tool">
           <mat-form-field>
             <mat-select placeholder="Toppings" multiple>
@@ -169,13 +62,14 @@
           </mat-form-field>
         </div>
       </div>
-      <table style="position: relative;" class="mat-table" matSort (matSortChange)="sortData($event)">
+
+      <table moka-table style="position: relative;" class="mat-table" matSort (matSortChange)="sortData($event)">
         <thead>
           <tr [sticky]="true" [position]="'top'" class="mat-header-row">
-            <th class="mat-header-cell">
-              <mat-checkbox (change)="masterToggle()" [checked]="checked()" [indeterminate]="indeterminate()"></mat-checkbox>
+            <th stickyStart class="mat-header-cell">
+              <mat-checkbox (change)="masterToggle($event)" [checked]="checked()" [indeterminate]="indeterminate()"></mat-checkbox>
             </th>
-            <th class="mat-header-cell" mat-sort-header="name">Dessert (100g)</th>
+            <th stickyStart class="mat-header-cell" mat-sort-header="name">Dessert (100g)</th>
             <th class="mat-header-cell" mat-sort-header="calories">Calories</th>
             <th class="mat-header-cell" mat-sort-header="fat">Fat (g)</th>
             <th class="mat-header-cell" mat-sort-header="carbs">Carbs (g)</th>
@@ -183,11 +77,12 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="mat-row" *ngFor="let item of tableList">
-            <td class="mat-cell">
-              <mat-checkbox (click)="selectionClick($event)" (change)="selectionChange($event, item)" [checked]="selectionChecked(item)"> </mat-checkbox>
+          <tr [sticky]="true" [position]="'left'" class="mat-row" *ngFor="let item of tableList">
+            <td stickyStart class="mat-cell">
+              <mat-checkbox (click)="selectionClick($event)" (change)="selectionToggle($event, item)" [checked]="selectionIsSelected(item)">
+              </mat-checkbox>
             </td>
-            <td class="mat-cell">{{item.name}}</td>
+            <td stickyStart class="mat-cell">{{item.name}}</td>
             <td class="mat-cell">{{item.calories}}</td>
             <td class="mat-cell">{{item.fat}}</td>
             <td class="mat-cell">{{item.carbs}}</td>
@@ -196,8 +91,8 @@
         </tbody>
         <tfoot>
           <tr [sticky]="true" [position]="'bottom'" class="mat-footer-row">
-            <td class="mat-footer-cell"> </td>
-            <td class="mat-footer-cell"> Total </td>
+            <td stickyStart class="mat-footer-cell"> </td>
+            <td stickyStart class="mat-footer-cell"> Total </td>
             <td class="mat-footer-cell"> </td>
             <td class="mat-footer-cell"> </td>
             <td class="mat-footer-cell"> </td>
@@ -205,10 +100,127 @@
           </tr>
         </tfoot>
       </table>
+      <div pin [direction]="'bottom'">
+        <mat-paginator [pageSizeOptions]="pageSizeList" [pageSize]="query.pageSize" [pageIndex]="query.pageIndex"
+          [length]="pageTotal" showFirstLastButtons (page)="page($event)"></mat-paginator>
+      </div>
+    </moka-table>
+
+  </moka-modal>
+</moka-scroll>
+
+<ng-template #aaa>
+  <moka-scroll style="height:60vh;">
+    <moka-modal>
+
+      <moka-table>
+        <div class="query-tool">
+          <div class="left-tool">
+            <h2>标题</h2>
+          </div>
+          <div class="right-tool">
+
+            <mat-slide-toggle [(ngModel)]="query.test3">滑动开关</mat-slide-toggle>
+
+            <button mat-stroked-button [matMenuTriggerFor]="animals">菜单</button>
+            <mat-menu #animals="matMenu">
+              <button mat-menu-item>Vertebrates</button>
+              <button mat-menu-item>Invertebrates</button>
+            </mat-menu>
+
+            <button mat-stroked-button (click)="test()">增加</button>
+            <button mat-stroked-button color="primary" (click)="open()">弹框</button>
+            <!-- <button mat-stroked-button color="accent" [routerLink]="['test']"></button> -->
+            <button mat-stroked-button color="warn" (click)="fullScreen()">全屏</button>
+          </div>
+        </div>
+
+        <!--  pin -->
+        <div pin class="query-tool">
+          <div class="left-tool">
+            <mat-form-field>
+              <mat-select placeholder="Toppings" multiple>
+                <mat-option [value]="'topping'">topping</mat-option>
+                <mat-option [value]="'Extra cheese'">Extra cheese</mat-option>
+                <mat-option [value]="'Mushroom'">Mushroom</mat-option>
+                <mat-option [value]="'Onion'">Onion</mat-option>
+                <mat-option [value]="'Pepperoni'">Pepperoni</mat-option>
+                <mat-option [value]="'Sausage'">Sausage</mat-option>
+                <mat-option [value]="'Tomato'">Tomato</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-select placeholder="Favorite food" [(ngModel)]="query.test1" name="test1">
+                <mat-option *ngFor="let food of foods" [value]="food.value">
+                  {{food.viewValue}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+          </div>
+          <div class="right-tool">
+
+            <mat-form-field class="example-full-width">
+              <input matInput [matDatepicker]="picker" (click)="picker.open()" placeholder="Choose a date">
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field>
+              <input matInput placeholder="Favorite food" [(ngModel)]="query.test2" name="test2">
+              <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="query.test2 = ''">
+                <mat-icon>X</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <table moka-table style="position: relative;" class="mat-table" matSort (matSortChange)="sortData($event)">
+          <thead>
+            <tr [sticky]="true" [position]="'top'" class="mat-header-row">
+              <th stickyStart class="mat-header-cell">
+                <mat-checkbox (change)="masterToggle($event)" [checked]="checked()" [indeterminate]="indeterminate()"></mat-checkbox>
+              </th>
+              <th stickyStart class="mat-header-cell" mat-sort-header="name">Dessert (100g)</th>
+              <th class="mat-header-cell" mat-sort-header="calories">Calories</th>
+              <th class="mat-header-cell" mat-sort-header="fat">Fat (g)</th>
+              <th class="mat-header-cell" mat-sort-header="carbs">Carbs (g)</th>
+              <th class="mat-header-cell" mat-sort-header="protein">Protein (g)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr [sticky]="true" [position]="'left'" class="mat-row" *ngFor="let item of tableList">
+              <td stickyStart class="mat-cell">
+                <mat-checkbox (click)="selectionClick($event)" (change)="selectionToggle($event, item)" [checked]="selectionIsSelected(item)">
+                </mat-checkbox>
+              </td>
+              <td stickyStart class="mat-cell">{{item.name}}</td>
+              <td class="mat-cell">{{item.calories}}</td>
+              <td class="mat-cell">{{item.fat}}</td>
+              <td class="mat-cell">{{item.carbs}}</td>
+              <td class="mat-cell">{{item.protein}}</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr [sticky]="true" [position]="'bottom'" class="mat-footer-row">
+              <td stickyStart class="mat-footer-cell"> </td>
+              <td stickyStart class="mat-footer-cell"> Total </td>
+              <td class="mat-footer-cell"> </td>
+              <td class="mat-footer-cell"> </td>
+              <td class="mat-footer-cell"> </td>
+              <td class="mat-footer-cell"> 100 </td>
+            </tr>
+          </tfoot>
+        </table>
+        <div pin [direction]="'bottom'">
+          <mat-paginator [pageSizeOptions]="pageSizeList" [pageSize]="query.pageSize" [pageIndex]="query.pageIndex"
+            [length]="pageTotal" showFirstLastButtons (page)="page($event)"></mat-paginator>
+        </div>
+      </moka-table>
+
     </moka-modal>
   </moka-scroll>
 </ng-template>
-
 
 <moka-bounce-in-right [outlet]="outlet">
   <router-outlet #outlet="outlet"></router-outlet>

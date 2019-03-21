@@ -2,11 +2,11 @@
  * @Author: moka === gaoyuanfell@sina.com
  * @Date: 2019-03-20 09:28:03
  * @Last Modified by: moka
- * @Last Modified time: 2019-03-20 18:04:32
+ * @Last Modified time: 2019-03-21 17:44:46
  */
-import { AfterContentInit, AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnInit, Renderer2, ViewEncapsulation, AfterContentChecked } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, Component, ElementRef, Input, OnInit, Renderer2, ViewEncapsulation } from '@angular/core';
 import { MatSidenav } from '@angular/material';
-import { RetainService } from 'src/app/components/retain/retain.service';
+import { MokaTableService } from '../moka-table/moka-table.service';
 
 @Component({
   selector: 'moka-full-screen',
@@ -18,7 +18,7 @@ import { RetainService } from 'src/app/components/retain/retain.service';
       display: block;
       position: fixed;
       width: 100%;
-      height: 100%;
+      bottom: 0;
     }
     `
   ],
@@ -62,7 +62,7 @@ export class MokaFullScreenComponent implements OnInit, AfterContentInit {
     this._drawer = val;
     if(this._drawer){
       this._drawer.openedChange.subscribe((event)=> {
-        this.retainService.subscribe()
+        this.mokaTableService.subscribe()
       })
     }
   }
@@ -73,7 +73,7 @@ export class MokaFullScreenComponent implements OnInit, AfterContentInit {
 
   bcrt
 
-  constructor(private changeDetectorRef: ChangeDetectorRef, private ref: ElementRef, private renderer: Renderer2, private retainService:RetainService) {
+  constructor(private ref: ElementRef, private renderer: Renderer2, private mokaTableService:MokaTableService) {
 
   }
 
@@ -85,7 +85,7 @@ export class MokaFullScreenComponent implements OnInit, AfterContentInit {
     let bcrt = (this.ref.nativeElement as HTMLDivElement).getBoundingClientRect()
     this.bcrt = {
       top: bcrt.top,
-      left: bcrt.left
+      left: bcrt.left,
     }
     this.addStyle(this.bcrt)
   }

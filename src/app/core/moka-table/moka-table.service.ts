@@ -4,8 +4,8 @@ import { Subject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class RetainService {
-  retainSubject: Subject<any>
+export class MokaTableService {
+  retainSubject: Subject<any>;
 
   subscribe(){
     this.retainSubject.next()

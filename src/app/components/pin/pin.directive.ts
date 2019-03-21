@@ -2,13 +2,13 @@
  * @Author: moka === gaoyuanfell@sina.com
  * @Date: 2019-03-08 15:11:56
  * @Last Modified by: moka
- * @Last Modified time: 2019-03-21 11:13:29
+ * @Last Modified time: 2019-03-21 18:00:10
  */
-import { AfterViewChecked, Directive, ElementRef, Host, Input, OnDestroy, OnInit, Optional, Renderer2, ChangeDetectorRef, AfterContentChecked, NgZone } from "@angular/core";
+import { AfterViewChecked, Directive, ElementRef, Host, Input, OnDestroy, OnInit, Optional, Renderer2 } from "@angular/core";
 import { fromEvent, Subject } from "rxjs";
-import { debounceTime, map, takeUntil } from "rxjs/operators";
+import { map, takeUntil } from "rxjs/operators";
 import { MokaScrollComponent } from "src/app/core/moka-scroll/moka-scroll.component";
-import { RetainDirective } from '../retain/retain.directive';
+import { MokaTableComponent } from 'src/app/core/moka-table/moka-table.component';
 
 @Directive({
   selector: "[pin]"
@@ -40,13 +40,12 @@ export class PinDirective implements OnInit, OnDestroy, AfterViewChecked {
 
   constructor(
     @Host() @Optional() private _mokaScrollComponent: MokaScrollComponent,
-    @Host() @Optional() private retainDirective: RetainDirective,
-    private changeDetectorRef: ChangeDetectorRef,
+    @Host() @Optional() private mokaTableComponent: MokaTableComponent,
     public ref: ElementRef,
     private renderer: Renderer2,
   ) {
     this.ngUnsubscribe = new Subject<any>()
-    this.retainDirective.pinDirectives.push(this)
+    this.mokaTableComponent.pinDirectives.push(this)
   }
 
   time = 150;
@@ -77,7 +76,6 @@ export class PinDirective implements OnInit, OnDestroy, AfterViewChecked {
   subscribeChange() {
     if (!this.avatarBox) return;
     this.subscribeDefChange = true;
-    // this.changeDetectorRef.markForCheck()
   }
 
   implementSubscribeChange() {
@@ -92,7 +90,7 @@ export class PinDirective implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   addStyle() {
-    this.renderer.setStyle(this.ref.nativeElement, "position", "relative");
+    this.renderer.setStyle(this.ref.nativeElement, "position", "relative"); //  sticky relative
     this.renderer.setStyle(this.ref.nativeElement, "z-index", "100000");
   }
 
@@ -168,7 +166,8 @@ export class PinDirective implements OnInit, OnDestroy, AfterViewChecked {
     let bcrt:
       | ClientRect
       | DOMRect = this._mokaScrollComponent.ref.nativeElement.getBoundingClientRect();
-    let bottom = bcrt.bottom;
+    let bottom = bcrt.top + this._mokaScrollComponent.ref.nativeElement.clientHeight; // bcrt.bottom
+
     if (this.originalAttachBcrt) {
       bottom = bottom - this.originalAttachBcrt.height;
     }

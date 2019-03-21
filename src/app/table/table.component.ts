@@ -2,12 +2,11 @@
  * @Author: moka === gaoyuanfell@sina.com
  * @Date: 2019-03-08 15:09:34
  * @Last Modified by: moka
- * @Last Modified time: 2019-03-21 10:42:10
+ * @Last Modified time: 2019-03-21 15:19:38
  */
-import { ChangeDetectionStrategy, Component, Injector, OnInit, TemplateRef, ViewChild, Host, Optional, Inject, forwardRef, ChangeDetectorRef } from "@angular/core";
-import { MatDialog, MatDialogRef, MatSidenav, MatDrawerContainer, MatSidenavContent, MatDrawer } from "@angular/material";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Injector, OnInit, TemplateRef, ViewChild, ViewEncapsulation } from "@angular/core";
+import { MatDialog, MatDialogRef } from "@angular/material";
 import { QueryComponent } from "../core/query.component";
-import { MokaScrollComponent } from '../core/moka-scroll/moka-scroll.component';
 
 export interface Dessert {
   calories: number;
@@ -26,9 +25,11 @@ export interface Food {
   selector: "app-table",
   templateUrl: "./table.component.html",
   styleUrls: ["./table.component.less"],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class TableComponent extends QueryComponent<any> implements OnInit {
+
   constructor(public injector: Injector, private matDialog: MatDialog, private changeDetectorRef: ChangeDetectorRef) {
     super(injector);
     this.tableList = this.data
