@@ -3,6 +3,7 @@ import { CommonModule } from "@angular/common";
 import { CoreModule } from './core/core.module';
 import { MatModule } from './mat-module';
 import { PinModule, StickyModule } from './components';
+import { CdkModule } from './cdk-module';
 
 @NgModule({
   declarations: [
@@ -12,6 +13,7 @@ import { PinModule, StickyModule } from './components';
     CommonModule,
     CoreModule,
     MatModule,
+    CdkModule,
 
     PinModule,
     StickyModule,
@@ -19,6 +21,7 @@ import { PinModule, StickyModule } from './components';
   exports: [
     CoreModule,
     MatModule,
+    CdkModule,
 
     PinModule,
     StickyModule,

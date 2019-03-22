@@ -1,8 +1,8 @@
 /*
  * @Author: moka === gaoyuanfell@sina.com
  * @Date: 2019-03-08 15:10:51
- * @Last Modified by:   moka
- * @Last Modified time: 2019-03-08 15:10:51
+ * @Last Modified by: moka
+ * @Last Modified time: 2019-03-22 16:50:41
  */
 export interface AutoCookieModel {
   keep?: boolean
@@ -25,32 +25,35 @@ export function AutoCookie({defaultValue = {}, keepValue, cookieKey, ignore = ['
     if (keepValue) {
       Object.assign(defaultValue, keepValue);
     }
-    Reflect.set(target, propertyKey, defaultValue);
 
-    if (keep) {
-      const obj = target[propertyKey];
-      const proxy = new Proxy(obj, {
-        get: function (tar, key, receiver) {
-          return Reflect.get(tar, key, receiver);
-        },
-        set: function (tar, key: string, value, receiver) {
-          if (ignore.indexOf(key) != -1) return true;
-          let bo = Reflect.set(tar, key, value, receiver);
-          if (bo && localKey) {
-            window.localStorage.setItem(localKey, JSON.stringify(tar));
-          }
-          return bo;
-        },
-        deleteProperty: function (tar, key) {
-          let bo = Reflect.deleteProperty(tar, key);
-          if (bo && localKey) {
-            window.localStorage.setItem(localKey, JSON.stringify(tar));
-          }
-          return bo;
-        }
-      });
-      Reflect.set(target, propertyKey, proxy);
-    }
+    target[propertyKey] = defaultValue
+
+    // Reflect.set(target, propertyKey, defaultValue);
+
+    // if (keep) {
+    //   const obj = target[propertyKey];
+    //   const proxy = new Proxy(obj, {
+    //     get: function (tar, key, receiver) {
+    //       return Reflect.get(tar, key, receiver);
+    //     },
+    //     set: function (tar, key: string, value, receiver) {
+    //       if (ignore.indexOf(key) != -1) return true;
+    //       let bo = Reflect.set(tar, key, value, receiver);
+    //       if (bo && localKey) {
+    //         window.localStorage.setItem(localKey, JSON.stringify(tar));
+    //       }
+    //       return bo;
+    //     },
+    //     deleteProperty: function (tar, key) {
+    //       let bo = Reflect.deleteProperty(tar, key);
+    //       if (bo && localKey) {
+    //         window.localStorage.setItem(localKey, JSON.stringify(tar));
+    //       }
+    //       return bo;
+    //     }
+    //   });
+    //   Reflect.set(target, propertyKey, proxy);
+    // }
 
   };
 }

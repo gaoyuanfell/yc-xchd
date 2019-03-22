@@ -2,7 +2,7 @@
  * @Author: moka === gaoyuanfell@sina.com
  * @Date: 2019-03-20 09:28:03
  * @Last Modified by: moka
- * @Last Modified time: 2019-03-22 13:51:54
+ * @Last Modified time: 2019-03-22 16:48:00
  */
 import { AfterContentInit, ChangeDetectionStrategy, Component, ElementRef, Input, OnInit, Renderer2, ViewEncapsulation } from '@angular/core';
 import { MatSidenav } from '@angular/material';
@@ -52,9 +52,12 @@ export class MokaFullScreenComponent implements OnInit, AfterContentInit {
   }
 
   addStyle(bcrt){
-    for (const [key, value] of Object.entries(bcrt)) {
-      this.renderer.setStyle(this.ref.nativeElement, key, `${value}px`)
+    for(const key of Object.keys(bcrt)){
+      this.renderer.setStyle(this.ref.nativeElement, key, `${bcrt[key]}px`)
     }
+    // for (const [key, value] of Object.entries(bcrt)) {
+    //   this.renderer.setStyle(this.ref.nativeElement, key, `${value}px`)
+    // }
   }
 
   private _drawer:MatSidenav
