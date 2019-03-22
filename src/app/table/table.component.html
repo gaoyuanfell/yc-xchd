@@ -2,7 +2,8 @@
   <moka-modal style="min-width: 1200px;">
 
     <moka-table>
-      <div class="query-tool">
+
+      <div pin [direction]="'top'" #aaaaaaa="pin" class="query-tool">
         <div class="left-tool">
           <h2>标题</h2>
         </div>
@@ -24,7 +25,7 @@
       </div>
 
       <!--  pin -->
-      <div pin class="query-tool">
+      <div pin [direction]="'top'" [attach]="aaaaaaa" class="query-tool">
         <div class="left-tool">
           <mat-form-field>
             <mat-select placeholder="Toppings" multiple>

@@ -2,12 +2,12 @@
  * @Author: moka === gaoyuanfell@sina.com
  * @Date: 2019-03-08 15:13:45
  * @Last Modified by: moka
- * @Last Modified time: 2019-03-21 16:20:13
+ * @Last Modified time: 2019-03-22 14:04:23
  */
 import { Direction, Directionality } from "@angular/cdk/bidi";
 import { Platform } from "@angular/cdk/platform";
 import { DOCUMENT } from "@angular/common";
-import { AfterViewChecked, ChangeDetectorRef, Directive, ElementRef, Host, Inject, Input, OnInit, Optional } from "@angular/core";
+import { AfterViewChecked, ChangeDetectorRef, Directive, ElementRef, Host, Inject, Input, OnInit, Optional, AfterViewInit } from "@angular/core";
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { MokaScrollComponent } from 'src/app/core/moka-scroll/moka-scroll.component';
@@ -17,7 +17,7 @@ import { MokaStickyStyler } from './moka-sticky-styler';
 @Directive({
   selector: "[sticky]"
 })
-export class StickyDirective implements OnInit, AfterViewChecked {
+export class StickyDirective implements OnInit, AfterViewChecked, AfterViewInit {
 
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
@@ -88,9 +88,11 @@ export class StickyDirective implements OnInit, AfterViewChecked {
     }
   }
 
+  ngAfterViewInit() {
+  }
+
   ngAfterViewChecked() {
     if(this.subscribeDefChange){
-      // console.info('bb')
       this.subscribeDefChange = false;
       this._setupStickyStyler();
       this.implementSubscribeChange();

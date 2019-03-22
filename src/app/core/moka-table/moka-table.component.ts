@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, ViewEncapsulation, OnDestroy, ChangeDetectorRef, NgZone, AfterContentChecked, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ViewEncapsulation, OnDestroy, ChangeDetectorRef, NgZone, AfterContentChecked, AfterViewChecked, AfterContentInit, AfterViewInit } from '@angular/core';
 import { takeUntil, debounceTime } from 'rxjs/operators';
 import { fromEvent, Subject } from 'rxjs';
 import { PinDirective } from 'src/app/components/pin/pin.directive';
@@ -15,23 +15,19 @@ import { MokaTableService } from './moka-table.service';
   },
   styleUrls: ['./moka-table.component.less'],
 })
-export class MokaTableComponent implements OnDestroy, OnInit {
+export class MokaTableComponent implements OnDestroy, OnInit, AfterViewInit {
+
+  ngAfterViewInit(): void {
+    this.mokaTableService.subscribe()
+  }
 
   ngOnInit() {
     this.mokaTableService.retainSubject.pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
-      this.pinDirectives.forEach((p) => {
-        p.subscribeChange()
-      })
       this.stickyDirectives.forEach((p) => {
-        // console.info('aa')
         p.subscribeChange()
       })
     })
-
     fromEvent(window, "resize").pipe(debounceTime(0), takeUntil(this.ngUnsubscribe)).subscribe(() => {
-      this.pinDirectives.forEach((p) => {
-        p.subscribeChange()
-      })
       this.stickyDirectives.forEach((p) => {
         p.subscribeChange()
       })
@@ -39,8 +35,8 @@ export class MokaTableComponent implements OnDestroy, OnInit {
   }
 
   ngOnDestroy() {
-    // this.ngUnsubscribe.next()
-    // this.ngUnsubscribe.complete()
+    this.ngUnsubscribe.next()
+    this.ngUnsubscribe.complete()
   }
 
   private ngUnsubscribe: Subject<any>;
