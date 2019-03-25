@@ -12,6 +12,9 @@ export class IndexComponent implements OnInit {
   constructor(public platform: Platform) { }
 
   ngOnInit() {
+    this.items = Array.from({length: 10000}).map((_, i) => `Item #${i}`);
   }
+
+  items:Array<any>
 
 }

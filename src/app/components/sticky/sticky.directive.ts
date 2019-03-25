@@ -2,12 +2,12 @@
  * @Author: moka === gaoyuanfell@sina.com
  * @Date: 2019-03-08 15:13:45
  * @Last Modified by: moka
- * @Last Modified time: 2019-03-22 14:04:23
+ * @Last Modified time: 2019-03-25 09:49:20
  */
 import { Direction, Directionality } from "@angular/cdk/bidi";
 import { Platform } from "@angular/cdk/platform";
 import { DOCUMENT } from "@angular/common";
-import { AfterViewChecked, ChangeDetectorRef, Directive, ElementRef, Host, Inject, Input, OnInit, Optional, AfterViewInit } from "@angular/core";
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Directive, ElementRef, Host, Inject, Input, OnInit, Optional } from "@angular/core";
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { MokaScrollComponent } from 'src/app/core/moka-scroll/moka-scroll.component';
@@ -43,14 +43,14 @@ export class StickyDirective implements OnInit, AfterViewChecked, AfterViewInit 
   protected stickyCssClass: string = "moka-table-sticky";
 
   ngOnInit() {
-    this.subscribeDef.pipe(debounceTime(0)).subscribe(()=> {
+    this.subscribeDef.pipe(debounceTime(0)).subscribe(() => {
       this.subscribeDefChange = true;
       this.changeDetectorRef.markForCheck()
     })
   }
 
   private _setupStickyStyler() {
-    if(this._stickyStyler) return;
+    if (this._stickyStyler) return;
     const direction: Direction = this._dir ? this._dir.value : "ltr";
     this._stickyStyler = new MokaStickyStyler(
       true,
@@ -64,20 +64,19 @@ export class StickyDirective implements OnInit, AfterViewChecked, AfterViewInit 
   }
 
   private subscribeDef = new Subject<any>();
-  subscribeChange(){
+  subscribeChange() {
     this.subscribeDef.next()
   }
 
   private subscribeDefChange = false;
-  implementSubscribeChange(){
+  implementSubscribeChange() {
     let rows = <HTMLElement>this.ref.nativeElement;
     const stickyStartStates = Array.from(rows.children).map(column => column.hasAttribute('stickyStart'))
     const stickyEndStates = Array.from(rows.children).map(column => column.hasAttribute('stickyEnd'))
-
     switch (this.position) {
       case 'top':
       case 'bottom':
-        this._stickyStyler.clearStickyPositioning([rows], ['top', 'bottom','left', 'right'])
+        this._stickyStyler.clearStickyPositioning([rows], ['top', 'bottom', 'left', 'right'])
         this._stickyStyler.stickRows([rows], [this.sticky], this.position)
         this._stickyStyler.updateStickyColumns([rows], stickyStartStates, stickyEndStates)
         break
@@ -89,10 +88,11 @@ export class StickyDirective implements OnInit, AfterViewChecked, AfterViewInit 
   }
 
   ngAfterViewInit() {
+    this.subscribeDef.next()
   }
 
   ngAfterViewChecked() {
-    if(this.subscribeDefChange){
+    if (this.subscribeDefChange) {
       this.subscribeDefChange = false;
       this._setupStickyStyler();
       this.implementSubscribeChange();

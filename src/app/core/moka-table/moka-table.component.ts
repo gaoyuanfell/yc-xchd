@@ -1,6 +1,6 @@
-import { Component, OnInit, ChangeDetectionStrategy, ViewEncapsulation, OnDestroy, ChangeDetectorRef, NgZone, AfterContentChecked, AfterViewChecked, AfterContentInit, AfterViewInit } from '@angular/core';
-import { takeUntil, debounceTime } from 'rxjs/operators';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { fromEvent, Subject } from 'rxjs';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 import { PinDirective } from 'src/app/components/pin/pin.directive';
 import { StickyDirective } from 'src/app/components/sticky/sticky.directive';
 import { MokaTableService } from './moka-table.service';
@@ -15,11 +15,7 @@ import { MokaTableService } from './moka-table.service';
   },
   styleUrls: ['./moka-table.component.less'],
 })
-export class MokaTableComponent implements OnDestroy, OnInit, AfterViewInit {
-
-  ngAfterViewInit(): void {
-    this.mokaTableService.subscribe()
-  }
+export class MokaTableComponent implements OnDestroy, OnInit {
 
   ngOnInit() {
     this.mokaTableService.retainSubject.pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {

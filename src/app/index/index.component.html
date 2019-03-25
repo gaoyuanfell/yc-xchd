@@ -1,16 +1,21 @@
 <moka-scroll>
   <moka-modal>
 
+    <input type="color">
 
-    <div class="box" cdkDrag>
 
+    <div class="box" cdkDrag></div>
+
+    <mat-slider></mat-slider>
+
+    <cdk-virtual-scroll-viewport itemSize="50" class="example-viewport">
+        <div *cdkVirtualFor="let item of items" class="example-item">{{item}}</div>
+    </cdk-virtual-scroll-viewport>
+
+
+    <div style="margin: 50px;">
+      <color-picker></color-picker>
     </div>
-
-
-    <p class="color">111111111111111</p>
-
-
-
 
   </moka-modal>
 </moka-scroll>

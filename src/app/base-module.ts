@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { CoreModule } from './core/core.module';
 import { MatModule } from './mat-module';
-import { PinModule, StickyModule } from './components';
+import { PinModule, StickyModule, ColorPickerModule } from './components';
 import { CdkModule } from './cdk-module';
 
 @NgModule({
@@ -17,6 +17,7 @@ import { CdkModule } from './cdk-module';
 
     PinModule,
     StickyModule,
+    ColorPickerModule,
   ],
   exports: [
     CoreModule,
@@ -25,6 +26,7 @@ import { CdkModule } from './cdk-module';
 
     PinModule,
     StickyModule,
+    ColorPickerModule,
   ]
 })
 export class BaseModule {}
