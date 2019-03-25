@@ -15,6 +15,8 @@ export class ColorPickerComponent implements AfterViewInit {
   @ViewChild('colorCursor') colorCursorRef: ElementRef;
   @ViewChild('colorSilderBar') colorSilderBarRef: ElementRef;
   @ViewChild('colorSilderThumb') colorSilderThumbRef: ElementRef;
+  @ViewChild('colorAlphaSilderBar') colorAlphaSilderBarRef: ElementRef;
+  @ViewChild('colorAlphaSilderThumb') colorAlphaSilderThumbRef: ElementRef;
 
   constructor(private renderer: Renderer2) {
 
@@ -77,6 +79,35 @@ export class ColorPickerComponent implements AfterViewInit {
       })
     ).subscribe(position => {
       this.setRefPosition(colorSilderThumbRef, position)
+    })
+
+    let colorAlphaSilderBarRef = this.colorAlphaSilderBarRef.nativeElement as HTMLDivElement
+    let colorAlphaSilderThumbRef = this.colorAlphaSilderThumbRef.nativeElement as HTMLDivElement
+
+    fromEvent(colorAlphaSilderBarRef, 'mousedown').pipe(
+      switchMap(() => {
+        return fromEvent(window, 'mousemove').pipe(
+          map((event: MouseEvent) => {
+            return this.getRefPosition(colorAlphaSilderBarRef, colorAlphaSilderThumbRef, event, false)
+          }),
+          takeUntil(fromEvent(window, 'mouseup'))
+        )
+      })
+    ).subscribe(position => {
+      this.setRefPosition(colorAlphaSilderThumbRef, position)
+    })
+
+    fromEvent(colorAlphaSilderBarRef, 'mousedown').pipe(
+      switchMap(() => {
+        return fromEvent(window, 'mouseup').pipe(
+          map((event: MouseEvent) => {
+            return this.getRefPosition(colorAlphaSilderBarRef, colorAlphaSilderThumbRef, event, false)
+          }),
+          takeUntil(fromEvent(window, 'mousemove'))
+        )
+      })
+    ).subscribe(position => {
+      this.setRefPosition(colorAlphaSilderThumbRef, position)
     })
   }
 
