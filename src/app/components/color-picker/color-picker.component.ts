@@ -98,11 +98,9 @@ export class ColorPickerComponent implements AfterViewInit, OnDestroy {
 
     if (this.value) {
       let rgba = this.value.match(/(\d\.?)+/ig)
-      console.info(rgba)
       if (rgba.length >= 3) {
         let result = this.rgb2hsv(rgba)
         let positions = this.hsv2Position(result)
-        console.info(positions)
         colorSilderBarSubject.next(positions[0])
         colorAlphaSilderBarSubject.next(positions[1])
         colorSvpanelSubject.next(positions[2])
@@ -251,7 +249,6 @@ export class ColorPickerComponent implements AfterViewInit, OnDestroy {
 
   setRefPosition(ref, position) {
     let p = { ...position }
-    console.info(position)
     let bcrt = ref.getBoundingClientRect()
     let keys = Object.keys(p)
     p.left = p.left - bcrt.width / 2
