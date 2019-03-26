@@ -2,12 +2,6 @@ import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, E
 import { fromEvent, Subject } from 'rxjs';
 import { map, switchMap, takeUntil } from 'rxjs/operators';
 
-export interface RGBA {
-  r: any
-  g: any
-  b: any
-  a?: any
-}
 
 @Component({
   selector: 'color-picker',
@@ -149,10 +143,10 @@ export class ColorPickerComponent implements AfterViewInit, OnDestroy {
     return { h: H, s: S, v: V, a: A };
   }
 
-  hsv2Position(hsv){
+  hsv2Position(hsv) {
     let positions = []
 
-    let {h,s,v,a} = hsv
+    let { h, s, v, a } = hsv
     let colorSilderBarRef = this.colorSilderBarRef.nativeElement as HTMLDivElement
     let colorSilderThumb = this.colorSilderThumbRef.nativeElement as HTMLDivElement
     let colorSilderBarH = colorSilderBarRef.clientHeight;
