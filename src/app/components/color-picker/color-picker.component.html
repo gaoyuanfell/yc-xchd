@@ -1,6 +1,6 @@
 <div class="color-picker">
   <div class="color-wrapper">
-    <div class="color-svpanel" #colorSvpanel>
+    <div class="color-svpanel" #colorSvpanel [ngStyle]="svpanelRGBAStyle">
       <div class="color-white"></div>
       <div class="color-black"></div>
       <div class="color-cursor" #colorCursor></div>
@@ -11,12 +11,12 @@
     </div>
   </div>
   <div class="color-alpha-slider">
-    <div class="color-alpha-slider-bar" #colorAlphaSilderBar></div>
+    <div class="color-alpha-slider-bar" #colorAlphaSilderBar [ngStyle]="alphaRGBAStyle"></div>
     <div class="color-alpha-slider-thumb" #colorAlphaSilderThumb></div>
   </div>
   <div class="color-btns">
     <div class="color-value">
-      <input type="text">
+      <input type="text" [(ngModel)]="value">
     </div>
     <button class="color-button">取消</button>
     <button class="color-button">确定</button>
