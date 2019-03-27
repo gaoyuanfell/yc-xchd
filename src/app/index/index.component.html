@@ -12,9 +12,13 @@
         <div *cdkVirtualFor="let item of items" class="example-item">{{item}}</div>
     </cdk-virtual-scroll-viewport>
 
+    <div style="margin: 50px;">
+      <button colorPicker [(ngModel)]="value" (change)="$event">color</button>
+      <p [ngStyle]="{'background': value}">{{value}}</p>
+    </div>
 
     <div style="margin: 50px;">
-      <color-picker></color-picker>
+        <!-- <color-picker></color-picker> -->
     </div>
 
   </moka-modal>

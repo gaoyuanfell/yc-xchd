@@ -1,10 +1,14 @@
 .color-picker {
   display: inline-block;
   user-select: none;
+  box-shadow: 0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12);
+  background-color: #fff;
+  color: rgba(0,0,0,.87);
+  padding: 10px;
+  border-radius: 4px;
   .color-wrapper {
     display: flex;
     margin-bottom: 6px;
-
     .color-svpanel {
       width: 280px;
       height: 180px;
@@ -108,10 +112,13 @@
     margin-top: 6px;
     justify-content: space-between;
     display: flex;
+    align-items: center;
 
     .color-value {
       height: 28px;
       line-height: 28px;
+      width: 160px;
+      margin-right: auto;
 
       input {
         -webkit-appearance: none;
@@ -125,7 +132,7 @@
         font-size: inherit;
         height: 100%;
         outline: 0;
-        padding: 0 15px;
+        padding: 0 10px;
         transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
         width: 100%;
 
@@ -135,5 +142,15 @@
         }
       }
     }
+    .color-button{
+      height: 28px;
+      line-height: 28px;
+      min-width: 40px;
+      padding: 0 10px;
+      &:first-of-type{
+        margin-right: 10px;
+      }
+    }
+
   }
 }

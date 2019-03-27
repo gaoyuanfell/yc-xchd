@@ -18,7 +18,7 @@
     <div class="color-value">
       <input type="text" [(ngModel)]="value">
     </div>
-    <button class="color-button">取消</button>
-    <button class="color-button">确定</button>
+    <button class="color-button" mat-stroked-button (click)="cancel()">取消</button>
+    <button class="color-button" mat-stroked-button color="primary" (click)="confirm()">确定</button>
   </div>
 </div>

@@ -17,4 +17,6 @@ export class IndexComponent implements OnInit {
 
   items:Array<any>
 
+  value
+
 }
