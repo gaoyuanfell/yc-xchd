@@ -2,7 +2,7 @@
  * @Author: moka === gaoyuanfell@sina.com
  * @Date: 2019-03-08 15:11:56
  * @Last Modified by: moka
- * @Last Modified time: 2019-03-22 14:06:55
+ * @Last Modified time: 2019-03-28 10:05:26
  */
 import { AfterViewInit, Directive, ElementRef, Host, Input, OnInit, Optional, Renderer2 } from "@angular/core";
 import { MokaTableComponent } from 'src/app/core/moka-table/moka-table.component';
@@ -78,11 +78,11 @@ export class PinDirective implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-
+    this.addStyle()
+    this.position()
   }
 
   ngAfterViewInit() {
-    this.addStyle()
-    this.position()
+
   }
 }
