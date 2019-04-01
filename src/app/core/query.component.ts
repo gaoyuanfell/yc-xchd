@@ -46,12 +46,14 @@ export abstract class QueryComponent<T> {
   })
   protected query;
 
-  isAllSelected() {
+  // 是否全选
+  private isAllSelected() {
     const numSelected = this.selection.selected.length;
     const numRows = this.tableList.length;
     return numSelected === numRows;
   }
 
+  // 全选或清空
   masterToggle(event) {
     if(!event) return;
     this.isAllSelected()
@@ -59,20 +61,24 @@ export abstract class QueryComponent<T> {
       : this.tableList.forEach(row => this.selection.select(row));
   }
 
+  // 是否全选的状态
   indeterminate() {
     return this.selection.hasValue() && !this.isAllSelected();
   }
 
-  checked() {
+  // 元素选中状态
+  selectionChecked() {
     return this.selection.hasValue() && this.isAllSelected();
   }
 
+  // 元素选中状态改变
   selectionToggle(event, item){
     if(event){
       this.selection.toggle(item)
     }
   }
 
+  // 元素是否选中
   selectionIsSelected(item){
     return this.selection.isSelected(item)
   }
@@ -81,12 +87,19 @@ export abstract class QueryComponent<T> {
     event.stopPropagation()
   }
 
+  // 获取所有选中元素
+  selectedAll(){
+    return this.selection.selected
+  }
+
+  // 排序回调
   sortData(sort: Sort) {
     this.query.active = sort.active;
     this.query.direction = sort.direction;
     this.search();
   }
 
+  // 分页回调
   page(page: PageEvent) {
     this.query.pageSize = page.pageSize;
     this.query.pageIndex = page.pageIndex;

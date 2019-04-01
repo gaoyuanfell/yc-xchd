@@ -1,9 +1,9 @@
-import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
+import { NgModule } from "@angular/core";
+import { CdkModule } from './cdk-module';
+import Components from './components';
 import { CoreModule } from './core/core.module';
 import { MatModule } from './mat-module';
-import { PinModule, StickyModule, ColorPickerModule } from './components';
-import { CdkModule } from './cdk-module';
 
 @NgModule({
   declarations: [
@@ -15,18 +15,14 @@ import { CdkModule } from './cdk-module';
     MatModule,
     CdkModule,
 
-    PinModule,
-    StickyModule,
-    ColorPickerModule,
+    ...Components
   ],
   exports: [
     CoreModule,
     MatModule,
     CdkModule,
 
-    PinModule,
-    StickyModule,
-    ColorPickerModule,
+    ...Components
   ]
 })
 export class BaseModule {}

@@ -55,9 +55,6 @@ export class MokaFullScreenComponent implements OnInit, AfterContentInit {
     for(const key of Object.keys(bcrt)){
       this.renderer.setStyle(this.ref.nativeElement, key, `${bcrt[key]}px`)
     }
-    // for (const [key, value] of Object.entries(bcrt)) {
-    //   this.renderer.setStyle(this.ref.nativeElement, key, `${value}px`)
-    // }
   }
 
   private _drawer:MatSidenav

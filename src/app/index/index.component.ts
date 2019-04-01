@@ -5,7 +5,7 @@ import { Platform } from '@angular/cdk/platform';
   selector: 'app-index',
   templateUrl: './index.component.html',
   styleUrls: ['./index.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class IndexComponent implements OnInit {
 
@@ -18,5 +18,14 @@ export class IndexComponent implements OnInit {
   items:Array<any>
 
   value
+
+  date1 = '2019-04-01'
+
+  startView: 'month' | 'year' | 'multi-year' = 'month'
+
+  myFilter = (d: Date): boolean => {
+    const day = d.getDay();
+    return day !== 0 && day !== 6;
+  }
 
 }

@@ -68,7 +68,7 @@
         <thead>
           <tr [sticky]="true" [position]="'top'" class="mat-header-row">
             <th stickyStart class="mat-header-cell">
-              <mat-checkbox (change)="masterToggle($event)" [checked]="checked()" [indeterminate]="indeterminate()"></mat-checkbox>
+              <mat-checkbox (change)="masterToggle($event)" [checked]="selectionChecked()" [indeterminate]="indeterminate()"></mat-checkbox>
             </th>
             <th stickyStart class="mat-header-cell" mat-sort-header="name">Dessert (100g)</th>
             <th class="mat-header-cell" mat-sort-header="calories">Calories</th>
@@ -180,7 +180,7 @@
           <thead>
             <tr [sticky]="true" [position]="'top'" class="mat-header-row">
               <th stickyStart class="mat-header-cell">
-                <mat-checkbox (change)="masterToggle($event)" [checked]="checked()" [indeterminate]="indeterminate()"></mat-checkbox>
+                <mat-checkbox (change)="masterToggle($event)" [checked]="selectionChecked()" [indeterminate]="indeterminate()"></mat-checkbox>
               </th>
               <th stickyStart class="mat-header-cell" mat-sort-header="name">Dessert (100g)</th>
               <th class="mat-header-cell" mat-sort-header="calories">Calories</th>

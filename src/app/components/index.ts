@@ -13,3 +13,11 @@ export {
   StickyModule,
   ColorPickerModule,
 }
+
+const components = [
+  PinModule,
+  StickyModule,
+  ColorPickerModule,
+]
+
+export default components

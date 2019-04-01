@@ -9,7 +9,7 @@
     <mat-slider></mat-slider>
 
     <cdk-virtual-scroll-viewport itemSize="50" class="example-viewport">
-        <div *cdkVirtualFor="let item of items" class="example-item">{{item}}</div>
+      <div *cdkVirtualFor="let item of items" class="example-item">{{item}}</div>
     </cdk-virtual-scroll-viewport>
 
     <div style="margin: 50px;">
@@ -18,7 +18,22 @@
     </div>
 
     <div style="margin: 50px;">
-        <!-- <color-picker></color-picker> -->
+      <div>
+        <mat-radio-group aria-label="Select an option" [(ngModel)]="startView">
+          <mat-radio-button value="month">month</mat-radio-button>
+          <mat-radio-button value="year">year</mat-radio-button>
+          <mat-radio-button value="multi-year">multi-year</mat-radio-button>
+        </mat-radio-group>
+      </div>
+
+      <div>
+        <mat-form-field>
+          <input matInput [matDatepickerFilter]="myFilter" [matDatepicker]="picker" [(ngModel)]="date1"
+            placeholder="Choose a date">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker [startView]="startView"></mat-datepicker>
+        </mat-form-field>
+      </div>
     </div>
 
   </moka-modal>
