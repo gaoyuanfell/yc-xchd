@@ -9,7 +9,7 @@ import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy } from "@
 @Component({
   selector: "moka-layer",
   templateUrl: "./moka-layer.component.html",
-  styleUrls: ["./moka-layer.component.less"],
+  styleUrls: ["./moka-layer.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {

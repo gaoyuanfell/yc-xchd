@@ -13,7 +13,7 @@ import { MokaTableService } from './moka-table.service';
   host: {
     "[attr.class]": '"moka-table"',
   },
-  styleUrls: ['./moka-table.component.less'],
+  styleUrls: ['./moka-table.component.scss'],
 })
 export class MokaTableComponent implements OnDestroy, OnInit {
 

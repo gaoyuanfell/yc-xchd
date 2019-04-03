@@ -1,6 +1,6 @@
-@mat-header-row-height: 56px;
-@mat-row-height: 48px;
-@mat-row-horizontal-padding: 24px;
+$mat-header-row-height: 56px;
+$mat-row-height: 48px;
+$mat-row-horizontal-padding: 24px;
 
 table.mat-table{
   border-spacing: 0;
@@ -8,28 +8,28 @@ table.mat-table{
 }
 
 tr.mat-header-row {
-  height: @mat-header-row-height;
+  height: $mat-header-row-height;
 }
 
 tr.mat-row, tr.mat-footer-row {
-  height: @mat-row-height;
+  height: $mat-row-height;
 }
 
 th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type {
   border-left: 1px solid #e2e6eb;
-  padding-left: @mat-row-horizontal-padding;
+  padding-left: $mat-row-horizontal-padding;
   [dir='rtl'] & {
     padding-left: 0;
-    padding-right: @mat-row-horizontal-padding;
+    padding-right: $mat-row-horizontal-padding;
   }
 }
 
 th.mat-header-cell:last-of-type, td.mat-cell:last-of-type, td.mat-footer-cell:last-of-type {
   border-right: 1px solid #e2e6eb;
-  padding-right: @mat-row-horizontal-padding;
+  padding-right: $mat-row-horizontal-padding;
   [dir='rtl'] & {
     padding-right: 0;
-    padding-left: @mat-row-horizontal-padding;
+    padding-left: $mat-row-horizontal-padding;
   }
 }
 

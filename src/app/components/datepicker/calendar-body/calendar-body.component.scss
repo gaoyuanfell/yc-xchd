@@ -1,0 +1,115 @@
+@mixin cdk-a11y {
+  .cdk-visually-hidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+
+    // Avoid browsers rendering the focus ring in some cases.
+    outline: 0;
+
+    // Avoid some cases where the browser will still render the native controls (see #9049).
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+}
+
+// Applies styles for users in high contrast mode. Note that this only applies
+// to Microsoft browsers. Chrome can be included by checking for the `html[hc]`
+// attribute, however Chrome handles high contrast differently.
+//
+// @param target Which kind of high contrast setting to target. Defaults to `active`, can be
+//    `white-on-black` or `black-on-white`.
+@mixin cdk-high-contrast($target: active) {
+  @media (-ms-high-contrast: $target) {
+    @content;
+  }
+}
+
+$mat-calendar-body-label-padding-start: 5% !default;
+// We don't want the label to jump around when we switch between month and year views, so we use
+// the same amount of padding regardless of the number of columns. We align the header label with
+// the one third mark of the first cell, this was chosen somewhat arbitrarily to make it look
+// roughly like the mock. Half way is too far since the cell text is center aligned.
+$mat-calendar-body-label-side-padding: 33% / 7 !default;
+$mat-calendar-body-cell-min-size: 32px !default;
+$mat-calendar-body-cell-content-margin: 5% !default;
+$mat-calendar-body-cell-content-border-width: 1px !default;
+
+$mat-calendar-body-min-size: 7 * $mat-calendar-body-cell-min-size !default;
+$mat-calendar-body-cell-content-size: 100% - $mat-calendar-body-cell-content-margin * 2 !default;
+
+
+.mat-calendar-body {
+  min-width: $mat-calendar-body-min-size;
+}
+
+.mat-calendar-body-label {
+  height: 0;
+  line-height: 0;
+  text-align: left;
+  padding-left: $mat-calendar-body-label-side-padding;
+  padding-right: $mat-calendar-body-label-side-padding;
+}
+
+.mat-calendar-body-cell {
+  position: relative;
+  height: 0;
+  line-height: 0;
+  text-align: center;
+  outline: none;
+  cursor: pointer;
+}
+
+.mat-calendar-body-disabled {
+  cursor: default;
+}
+
+.mat-calendar-body-cell-content {
+  position: absolute;
+  top: $mat-calendar-body-cell-content-margin;
+  left: $mat-calendar-body-cell-content-margin;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+  width: $mat-calendar-body-cell-content-size;
+  height: $mat-calendar-body-cell-content-size;
+
+  // Prevents text being off-center on Android.
+  line-height: 1;
+
+  border-width: $mat-calendar-body-cell-content-border-width;
+  border-style: solid;
+
+  // Choosing a value clearly larger than the height ensures we get the correct capsule shape.
+  border-radius: 999px;
+
+  @include cdk-high-contrast {
+    border: none;
+  }
+}
+
+
+@include cdk-high-contrast {
+  .mat-datepicker-popup:not(:empty),
+  .mat-calendar-body-selected {
+    outline: solid 1px;
+  }
+
+  .mat-calendar-body-today {
+    outline: dotted 1px;
+  }
+}
+
+[dir='rtl'] {
+  .mat-calendar-body-label {
+    text-align: right;
+  }
+}

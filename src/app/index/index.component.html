@@ -34,6 +34,18 @@
           <mat-datepicker #picker [startView]="startView"></mat-datepicker>
         </mat-form-field>
       </div>
+      <div>
+        <mat-form-field>
+          <input matInput [matDatepickerFilter]="myFilter" [datepickerInput]="picker2" [(ngModel)]="date1"
+            placeholder="Choose a date">
+          <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+          <datepicker #picker2 [startView]="startView"></datepicker>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div style="margin: 50px;">
+      <!-- <calendar></calendar> -->
     </div>
 
   </moka-modal>

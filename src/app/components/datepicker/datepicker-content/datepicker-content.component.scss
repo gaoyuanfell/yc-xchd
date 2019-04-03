@@ -1,0 +1,552 @@
+// Utility for fetching a nested value from a typography config.
+@function _mat-get-type-value($config, $level, $name) {
+  @return map-get(map-get($config, $level), $name);
+}
+
+// Gets the font size for a level inside a typography config.
+@function mat-font-size($config, $level) {
+  @return _mat-get-type-value($config, $level, font-size);
+}
+
+// Gets the line height for a level inside a typography config.
+@function mat-line-height($config, $level) {
+  @return _mat-get-type-value($config, $level, line-height);
+}
+
+// Gets the font weight for a level inside a typography config.
+@function mat-font-weight($config, $level) {
+  @return _mat-get-type-value($config, $level, font-weight);
+}
+
+// Gets the letter spacing for a level inside a typography config.
+@function mat-letter-spacing($config, $level) {
+  @return _mat-get-type-value($config, $level, letter-spacing);
+}
+
+// Gets the font-family from a typography config and removes the quotes around it.
+@function mat-font-family($config, $level: null) {
+  $font-family: map-get($config, font-family);
+
+  @if $level != null {
+    $font-family: _mat-get-type-value($config, $level, font-family);
+  }
+
+  // Guard against unquoting non-string values, because it's deprecated.
+  @return if(type-of($font-family) == string, unquote($font-family), $font-family);
+}
+
+// Outputs the shorthand `font` CSS property, based on a set of typography values. Falls back to
+// the individual properties if a value that isn't allowed in the shorthand is passed in.
+@mixin mat-typography-font-shorthand($font-size, $font-weight, $line-height, $font-family) {
+  // If any of the values are set to `inherit`, we can't use the shorthand
+  // so we fall back to passing in the individual properties.
+  @if ($font-size == inherit or
+       $font-weight == inherit or
+       $line-height == inherit or
+       $font-family == inherit or
+       $font-size == null or
+       $font-weight == null or
+       $line-height == null or
+       $font-family == null) {
+
+    font-size: $font-size;
+    font-weight: $font-weight;
+    line-height: $line-height;
+    font-family: $font-family;
+  }
+  @else {
+    // Otherwise use the shorthand `font`, because it's the least amount of bytes. Note
+    // that we need to use interpolation for `font-size/line-height` in order to prevent
+    // Sass from dividing the two values.
+    font: $font-weight #{$font-size}/#{$line-height} $font-family;
+  }
+}
+
+// Converts a typography level into CSS styles.
+@mixin mat-typography-level-to-styles($config, $level) {
+  $font-size: mat-font-size($config, $level);
+  $font-weight: mat-font-weight($config, $level);
+  $line-height: mat-line-height($config, $level);
+  $font-family: mat-font-family($config, $level);
+
+  @include mat-typography-font-shorthand($font-size, $font-weight, $line-height, $font-family);
+  letter-spacing: mat-letter-spacing($config, $level);
+}
+
+
+// Media queries
+// TODO(josephperrott): Change $mat-xsmall and $mat-small usages to rely on BreakpointObserver,
+$mat-xsmall: 'max-width: 599px';
+$mat-small: 'max-width: 959px';
+
+// TODO: Revisit all z-indices before beta
+// z-index master list
+
+$z-index-fab: 20 !default;
+$z-index-drawer: 100 !default;
+
+// Global constants
+$pi: 3.14159265;
+
+// Padding between input toggles and their labels
+$mat-toggle-padding: 8px !default;
+// Width and height of input toggles
+$mat-toggle-size: 20px !default;
+
+// Easing Curves
+// TODO(jelbourn): all of these need to be revisited
+
+// The default animation curves used by material design.
+$mat-linear-out-slow-in-timing-function: cubic-bezier(0, 0, 0.2, 0.1) !default;
+$mat-fast-out-slow-in-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !default;
+$mat-fast-out-linear-in-timing-function: cubic-bezier(0.4, 0, 1, 1) !default;
+
+$ease-in-out-curve-function: cubic-bezier(0.35, 0, 0.25, 1) !default;
+
+$swift-ease-out-duration: 400ms !default;
+$swift-ease-out-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1) !default;
+$swift-ease-out: all $swift-ease-out-duration $swift-ease-out-timing-function !default;
+
+$swift-ease-in-duration: 300ms !default;
+$swift-ease-in-timing-function: cubic-bezier(0.55, 0, 0.55, 0.2) !default;
+$swift-ease-in: all $swift-ease-in-duration $swift-ease-in-timing-function !default;
+
+$swift-ease-in-out-duration: 500ms !default;
+$swift-ease-in-out-timing-function: $ease-in-out-curve-function !default;
+$swift-ease-in-out: all $swift-ease-in-out-duration $swift-ease-in-out-timing-function !default;
+
+$swift-linear-duration: 80ms !default;
+$swift-linear-timing-function: linear !default;
+$swift-linear: all $swift-linear-duration $swift-linear-timing-function !default;
+
+
+
+// A collection of mixins and CSS classes that can be used to apply elevation to a material
+// element.
+// See: https://material.io/design/environment/elevation.html
+// Examples:
+//
+//
+// .mat-foo {
+//   @include $mat-elevation(2);
+//
+//   &:active {
+//     @include $mat-elevation(8);
+//   }
+// }
+//
+// <div id="external-card" class="mat-elevation-z2"><p>Some content</p></div>
+//
+// For an explanation of the design behind how elevation is implemented, see the design doc at
+// https://goo.gl/Kq0k9Z.
+
+// Colors for umbra, penumbra, and ambient shadows. As described in the design doc, each elevation
+// level is created using a set of 3 shadow values, one for umbra (the shadow representing the
+// space completely obscured by an object relative to its light source), one for penumbra (the
+// space partially obscured by an object), and one for ambient (the space which contains the object
+// itself). For a further explanation of these terms and their meanings, see
+// https://en.wikipedia.org/wiki/Umbra,_penumbra_and_antumbra.
+
+// Maps for the different shadow sets and their values within each z-space. These values were
+// created by taking a few reference shadow sets created by Google's Designers and interpolating
+// all of the values between them.
+
+@function _get-umbra-map($color, $opacity) {
+  $shadow-color: if(type-of($color) == color, rgba($color, $opacity * 0.2), $color);
+
+  @return (
+    0: '0px 0px 0px 0px #{$shadow-color}',
+    1: '0px 2px 1px -1px #{$shadow-color}',
+    2: '0px 3px 1px -2px #{$shadow-color}',
+    3: '0px 3px 3px -2px #{$shadow-color}',
+    4: '0px 2px 4px -1px #{$shadow-color}',
+    5: '0px 3px 5px -1px #{$shadow-color}',
+    6: '0px 3px 5px -1px #{$shadow-color}',
+    7: '0px 4px 5px -2px #{$shadow-color}',
+    8: '0px 5px 5px -3px #{$shadow-color}',
+    9: '0px 5px 6px -3px #{$shadow-color}',
+    10: '0px 6px 6px -3px #{$shadow-color}',
+    11: '0px 6px 7px -4px #{$shadow-color}',
+    12: '0px 7px 8px -4px #{$shadow-color}',
+    13: '0px 7px 8px -4px #{$shadow-color}',
+    14: '0px 7px 9px -4px #{$shadow-color}',
+    15: '0px 8px 9px -5px #{$shadow-color}',
+    16: '0px 8px 10px -5px #{$shadow-color}',
+    17: '0px 8px 11px -5px #{$shadow-color}',
+    18: '0px 9px 11px -5px #{$shadow-color}',
+    19: '0px 9px 12px -6px #{$shadow-color}',
+    20: '0px 10px 13px -6px #{$shadow-color}',
+    21: '0px 10px 13px -6px #{$shadow-color}',
+    22: '0px 10px 14px -6px #{$shadow-color}',
+    23: '0px 11px 14px -7px #{$shadow-color}',
+    24: '0px 11px 15px -7px #{$shadow-color}'
+  );
+}
+
+@function _get-penumbra-map($color, $opacity) {
+  $shadow-color: if(type-of($color) == color, rgba($color, $opacity * 0.14), $color);
+
+  @return (
+    0: '0px 0px 0px 0px #{$shadow-color}',
+    1: '0px 1px 1px 0px #{$shadow-color}',
+    2: '0px 2px 2px 0px #{$shadow-color}',
+    3: '0px 3px 4px 0px #{$shadow-color}',
+    4: '0px 4px 5px 0px #{$shadow-color}',
+    5: '0px 5px 8px 0px #{$shadow-color}',
+    6: '0px 6px 10px 0px #{$shadow-color}',
+    7: '0px 7px 10px 1px #{$shadow-color}',
+    8: '0px 8px 10px 1px #{$shadow-color}',
+    9: '0px 9px 12px 1px #{$shadow-color}',
+    10: '0px 10px 14px 1px #{$shadow-color}',
+    11: '0px 11px 15px 1px #{$shadow-color}',
+    12: '0px 12px 17px 2px #{$shadow-color}',
+    13: '0px 13px 19px 2px #{$shadow-color}',
+    14: '0px 14px 21px 2px #{$shadow-color}',
+    15: '0px 15px 22px 2px #{$shadow-color}',
+    16: '0px 16px 24px 2px #{$shadow-color}',
+    17: '0px 17px 26px 2px #{$shadow-color}',
+    18: '0px 18px 28px 2px #{$shadow-color}',
+    19: '0px 19px 29px 2px #{$shadow-color}',
+    20: '0px 20px 31px 3px #{$shadow-color}',
+    21: '0px 21px 33px 3px #{$shadow-color}',
+    22: '0px 22px 35px 3px #{$shadow-color}',
+    23: '0px 23px 36px 3px #{$shadow-color}',
+    24: '0px 24px 38px 3px #{$shadow-color}'
+  );
+}
+
+@function _get-ambient-map($color, $opacity) {
+  $shadow-color: if(type-of($color) == color, rgba($color, $opacity * 0.12), $color);
+
+  @return (
+    0: '0px 0px 0px 0px #{$shadow-color}',
+    1: '0px 1px 3px 0px #{$shadow-color}',
+    2: '0px 1px 5px 0px #{$shadow-color}',
+    3: '0px 1px 8px 0px #{$shadow-color}',
+    4: '0px 1px 10px 0px #{$shadow-color}',
+    5: '0px 1px 14px 0px #{$shadow-color}',
+    6: '0px 1px 18px 0px #{$shadow-color}',
+    7: '0px 2px 16px 1px #{$shadow-color}',
+    8: '0px 3px 14px 2px #{$shadow-color}',
+    9: '0px 3px 16px 2px #{$shadow-color}',
+    10: '0px 4px 18px 3px #{$shadow-color}',
+    11: '0px 4px 20px 3px #{$shadow-color}',
+    12: '0px 5px 22px 4px #{$shadow-color}',
+    13: '0px 5px 24px 4px #{$shadow-color}',
+    14: '0px 5px 26px 4px #{$shadow-color}',
+    15: '0px 6px 28px 5px #{$shadow-color}',
+    16: '0px 6px 30px 5px #{$shadow-color}',
+    17: '0px 6px 32px 5px #{$shadow-color}',
+    18: '0px 7px 34px 6px #{$shadow-color}',
+    19: '0px 7px 36px 6px #{$shadow-color}',
+    20: '0px 8px 38px 7px #{$shadow-color}',
+    21: '0px 8px 40px 7px #{$shadow-color}',
+    22: '0px 8px 42px 7px #{$shadow-color}',
+    23: '0px 9px 44px 8px #{$shadow-color}',
+    24: '0px 9px 46px 8px #{$shadow-color}'
+  );
+}
+
+// The default duration value for elevation transitions.
+$mat-elevation-transition-duration: 280ms !default;
+
+// The default easing value for elevation transitions.
+$mat-elevation-transition-timing-function: $mat-fast-out-slow-in-timing-function;
+
+// The default color for elevation shadows.
+$mat-elevation-color: black !default;
+
+// The default opacity scaling value for elevation shadows.
+$mat-elevation-opacity: 1 !default;
+
+// Prefix for elevation-related selectors.
+$_mat-elevation-prefix: 'mat-elevation-z';
+
+// Applies the correct css rules to an element to give it the elevation specified by $zValue.
+// The $zValue must be between 0 and 24.
+@mixin mat-elevation($zValue, $color: $mat-elevation-color, $opacity: $mat-elevation-opacity) {
+  @if type-of($zValue) != number or not unitless($zValue) {
+    @error '$zValue must be a unitless number';
+  }
+  @if $zValue < 0 or $zValue > 24 {
+    @error '$zValue must be between 0 and 24';
+  }
+
+  box-shadow: #{map-get(_get-umbra-map($color, $opacity), $zValue)},
+              #{map-get(_get-penumbra-map($color, $opacity), $zValue)},
+              #{map-get(_get-ambient-map($color, $opacity), $zValue)};
+}
+
+@mixin _mat-theme-elevation($zValue, $theme, $opacity: $mat-elevation-opacity) {
+  $foreground: map-get($theme, foreground);
+  $elevation-color: map-get($foreground, elevation);
+  $elevation-color-or-default: if($elevation-color == null, $mat-elevation-color, $elevation-color);
+
+  @include mat-elevation($zValue, $elevation-color-or-default, $opacity);
+}
+
+// Applies the elevation to an element in a manner that allows
+// consumers to override it via the Material elevation classes.
+@mixin mat-overridable-elevation(
+    $zValue,
+    $color: $mat-elevation-color,
+    $opacity: $mat-elevation-opacity) {
+  &:not([class*='#{$_mat-elevation-prefix}']) {
+    @include mat-elevation($zValue, $color, $opacity);
+  }
+}
+
+@mixin _mat-theme-overridable-elevation($zValue, $theme, $opacity: $mat-elevation-opacity) {
+  $foreground: map-get($theme, foreground);
+  $elevation-color: map-get($foreground, elevation);
+  $elevation-color-or-default: if($elevation-color == null, $mat-elevation-color, $elevation-color);
+
+  @include mat-overridable-elevation($zValue, $elevation-color-or-default, $opacity);
+}
+
+// Returns a string that can be used as the value for a transition property for elevation.
+// Calling this function directly is useful in situations where a component needs to transition
+// more than one property.
+//
+// .foo {
+//   transition: mat-elevation-transition-property-value(), opacity 100ms ease;
+// }
+@function mat-elevation-transition-property-value(
+    $duration: $mat-elevation-transition-duration,
+    $easing: $mat-elevation-transition-timing-function) {
+  @return box-shadow #{$duration} #{$easing};
+}
+
+// Applies the correct css rules needed to have an element transition between elevations.
+// This mixin should be applied to elements whose elevation values will change depending on their
+// context (e.g. when active or disabled).
+//
+// NOTE(traviskaufman): Both this mixin and the above function use default parameters so they can
+// be used in the same way by clients.
+@mixin mat-elevation-transition(
+    $duration: $mat-elevation-transition-duration,
+    $easing: $mat-elevation-transition-timing-function) {
+  transition: mat-elevation-transition-property-value($duration, $easing);
+}
+
+
+
+$mat-datepicker-selected-today-box-shadow-width: 1px;
+$mat-datepicker-selected-fade-amount: 0.6;
+$mat-datepicker-today-fade-amount: 0.2;
+$mat-calendar-body-font-size: 13px !default;
+$mat-calendar-weekday-table-font-size: 11px !default;
+
+@mixin _mat-datepicker-color($palette) {
+  .mat-calendar-body-selected {
+    background-color: mat-color($palette);
+    color: mat-color($palette, default-contrast);
+  }
+
+  .mat-calendar-body-disabled > .mat-calendar-body-selected {
+    $background: mat-color($palette);
+
+    @if (type-of($background) == color) {
+      background-color: fade-out($background, $mat-datepicker-selected-fade-amount);
+    }
+    @else {
+      // If we couldn't resolve to background to a color (e.g. it's a CSS variable),
+      // fall back to fading the content out via `opacity`.
+      opacity: $mat-datepicker-today-fade-amount;
+    }
+  }
+
+  .mat-calendar-body-today.mat-calendar-body-selected {
+    box-shadow: inset 0 0 0 $mat-datepicker-selected-today-box-shadow-width
+                mat-color($palette, default-contrast);
+  }
+}
+
+@mixin mat-datepicker-theme($theme) {
+  $foreground: map-get($theme, foreground);
+  $background: map-get($theme, background);
+
+  .mat-calendar-arrow {
+    border-top-color: mat-color($foreground, icon);
+  }
+
+  // The prev/next buttons need a bit more specificity to
+  // avoid being overwritten by the .mat-icon-button.
+  .mat-datepicker-toggle,
+  .mat-datepicker-content .mat-calendar-next-button,
+  .mat-datepicker-content .mat-calendar-previous-button {
+    color: mat-color($foreground, icon);
+  }
+
+  .mat-calendar-table-header {
+    color: mat-color($foreground, hint-text);
+  }
+
+  .mat-calendar-table-header-divider::after {
+    background: mat-color($foreground, divider);
+  }
+
+  .mat-calendar-body-label {
+    color: mat-color($foreground, secondary-text);
+  }
+
+  .mat-calendar-body-cell-content {
+    color: mat-color($foreground, text);
+    border-color: transparent;
+  }
+
+  .mat-calendar-body-disabled > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected) {
+    color: mat-color($foreground, disabled-text);
+  }
+
+  .mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover,
+  .cdk-keyboard-focused .mat-calendar-body-active,
+  .cdk-program-focused .mat-calendar-body-active {
+    & > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected) {
+      background-color: mat-color($background, hover);
+    }
+  }
+
+  .mat-calendar-body-today:not(.mat-calendar-body-selected) {
+    // Note: though it's not text, the border is a hint about the fact that this is today's date,
+    // so we use the hint color.
+    border-color: mat-color($foreground, hint-text);
+  }
+
+  .mat-calendar-body-disabled > .mat-calendar-body-today:not(.mat-calendar-body-selected) {
+    $color: mat-color($foreground, hint-text);
+
+    @if (type-of($color) == color) {
+      border-color: fade-out($color, $mat-datepicker-today-fade-amount);
+    }
+    @else {
+      // If the color didn't resolve to a color value, but something like a CSS variable, we can't
+      // fade it out so we fall back to reducing the element opacity. Note that we don't use the
+      // $mat-datepicker-today-fade-amount, because hint text usually has some opacity applied
+      // to it already and we don't want them to stack on top of each other.
+      opacity: 0.5;
+    }
+  }
+
+  @include _mat-datepicker-color(map-get($theme, primary));
+
+  .mat-datepicker-content {
+    @include _mat-theme-elevation(4, $theme);
+    background-color: mat-color($background, card);
+    color: mat-color($foreground, text);
+
+    &.mat-accent {
+      @include _mat-datepicker-color(map-get($theme, accent));
+    }
+
+    &.mat-warn {
+      @include _mat-datepicker-color(map-get($theme, warn));
+    }
+  }
+
+  .mat-datepicker-content-touch {
+    @include _mat-theme-elevation(0, $theme);
+  }
+
+  .mat-datepicker-toggle-active {
+    color: mat-color(map-get($theme, primary));
+
+    &.mat-accent {
+      color: mat-color(map-get($theme, accent));
+    }
+
+    &.mat-warn {
+      color: mat-color(map-get($theme, warn));
+    }
+  }
+}
+
+@mixin mat-datepicker-typography($config) {
+  .mat-calendar {
+    font-family: mat-font-family($config);
+  }
+
+  .mat-calendar-body {
+    font-size: $mat-calendar-body-font-size;
+  }
+
+  .mat-calendar-body-label,
+  .mat-calendar-period-button {
+    font: {
+      size: mat-font-size($config, button);
+      weight: mat-font-weight($config, button);
+    }
+  }
+
+  .mat-calendar-table-header th {
+    font: {
+      size: $mat-calendar-weekday-table-font-size;
+      weight: mat-font-weight($config, body-1);
+    }
+  }
+}
+
+$mat-datepicker-calendar-padding: 8px;
+$mat-datepicker-non-touch-calendar-cell-size: 40px;
+$mat-datepicker-non-touch-calendar-width:
+    $mat-datepicker-non-touch-calendar-cell-size * 7 + $mat-datepicker-calendar-padding * 2;
+// Based on the natural height of the calendar in a month with 6 rows of dates
+// (largest the calendar will get).
+$mat-datepicker-non-touch-calendar-height: 354px;
+
+// Ideally the calendar would have a constant aspect ratio, no matter its size, and we would base
+// these measurements off the aspect ratio. Unfortunately, the aspect ratio does change a little as
+// the calendar grows, since some of the elements have pixel-based sizes. These numbers have been
+// chosen to minimize extra whitespace at larger sizes, while still ensuring we won't need
+// scrollbars at smaller sizes.
+$mat-datepicker-touch-landscape-width: 64vh;
+$mat-datepicker-touch-landscape-height: 80vh;
+$mat-datepicker-touch-portrait-width: 80vw;
+$mat-datepicker-touch-portrait-height: 100vw;
+$mat-datepicker-touch-min-width: 250px;
+$mat-datepicker-touch-min-height: 312px;
+$mat-datepicker-touch-max-width: 750px;
+$mat-datepicker-touch-max-height: 788px;
+
+
+.mat-datepicker-content {
+  display: block;
+  border-radius: 4px;
+
+  .mat-calendar {
+    width: $mat-datepicker-non-touch-calendar-width;
+    height: $mat-datepicker-non-touch-calendar-height;
+  }
+}
+
+.mat-datepicker-content-touch {
+  display: block;
+  // make sure the dialog scrolls rather than being cropped on ludicrously small screens
+  max-height: 80vh;
+  overflow: auto;
+
+  // TODO(mmalerba): hack to offset the padding of the dialog. Can be removed when we switch away
+  // from using dialog.
+  margin: -24px;
+
+  .mat-calendar {
+    min-width: $mat-datepicker-touch-min-width;
+    min-height: $mat-datepicker-touch-min-height;
+    max-width: $mat-datepicker-touch-max-width;
+    max-height: $mat-datepicker-touch-max-height;
+  }
+}
+
+@media all and (orientation: landscape) {
+  .mat-datepicker-content-touch .mat-calendar {
+    width: $mat-datepicker-touch-landscape-width;
+    height: $mat-datepicker-touch-landscape-height;
+  }
+}
+
+@media all and (orientation: portrait) {
+  .mat-datepicker-content-touch .mat-calendar {
+    width: $mat-datepicker-touch-portrait-width;
+    height: $mat-datepicker-touch-portrait-height;
+  }
+}

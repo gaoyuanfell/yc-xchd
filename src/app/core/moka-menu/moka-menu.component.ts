@@ -11,7 +11,7 @@ import { Router } from "@angular/router";
 @Component({
   selector: "moka-menu",
   templateUrl: "./moka-menu.component.html",
-  styleUrls: ["./moka-menu.component.less"],
+  styleUrls: ["./moka-menu.component.scss"],
   encapsulation: ViewEncapsulation.None,
   host: {
     "[attr.class]": '"menu"',

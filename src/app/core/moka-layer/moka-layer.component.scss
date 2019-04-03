@@ -1,5 +1,5 @@
-@header-height: 64px;
-@sidenav-width: 180px;
+$header-height: 64px;
+$sidenav-width: 180px;
 
 .mat-drawer-container {
   // height: calc(100% - @header-height);
@@ -9,12 +9,12 @@
 }
 
 .mat-drawer {
-  width: @sidenav-width;
+  width: $sidenav-width;
   height: 100%;
 }
 
 .moka-header {
-  height: @header-height;
+  height: $header-height;
   background: #001529;
   width: 100%;
   display: block;

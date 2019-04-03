@@ -12,7 +12,7 @@ import { filter, takeUntil, map, mapTo } from 'rxjs/operators';
 @Component({
   selector: 'app-moka-router-tabs',
   templateUrl: './moka-router-tabs.component.html',
-  styleUrls: ['./moka-router-tabs.component.less'],
+  styleUrls: ['./moka-router-tabs.component.scss'],
   host:{
     '[attr.class]':'"moka-router-tabs"',
     '[hidden]':'!cache.length',

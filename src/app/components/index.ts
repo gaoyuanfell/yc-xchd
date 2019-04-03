@@ -7,17 +7,20 @@
 import { PinModule } from './pin/pin.module';
 import { StickyModule } from './sticky/sticky.module';
 import { ColorPickerModule } from './color-picker/color-picker.module';
+import { DatepickerModule } from './datepicker/datepicker.module';
 
 export {
   PinModule,
   StickyModule,
   ColorPickerModule,
+  DatepickerModule,
 }
 
 const components = [
   PinModule,
   StickyModule,
   ColorPickerModule,
+  DatepickerModule,
 ]
 
 export default components

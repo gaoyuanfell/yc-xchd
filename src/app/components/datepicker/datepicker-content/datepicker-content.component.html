@@ -1,0 +1,36 @@
+<div style="display: flex;">
+<calendar #calendar cdkTrapFocus
+    [id]="datepicker.id"
+    [ngClass]="datepicker.panelClass"
+    [startAt]="datepicker.startAt"
+    [startView]="datepicker.startView"
+    [minDate]="datepicker._minDate"
+    [maxDate]="datepicker._maxDate"
+    [dateFilter]="datepicker._dateFilter"
+    [headerComponent]="datepicker.calendarHeaderComponent"
+    [dateClass]="datepicker.dateClass"
+    [@fadeInCalendar]="'enter'"
+    (selectedChange)="selectedChange($event, calendar)"
+    (yearSelected)="datepicker._selectYear($event)"
+    (monthSelected)="datepicker._selectMonth($event)">
+</calendar>
+<calendar #calendar2 cdkTrapFocus
+    [id]="datepicker.id"
+    [ngClass]="datepicker.panelClass"
+    [startAt]="datepicker.startAt"
+    [startView]="datepicker.startView"
+    [minDate]="datepicker._minDate"
+    [maxDate]="datepicker._maxDate"
+    [dateFilter]="datepicker._dateFilter"
+    [headerComponent]="datepicker.calendarHeaderComponent"
+    [dateClass]="datepicker.dateClass"
+    [@fadeInCalendar]="'enter'"
+    (selectedChange)="selectedChange($event, calendar2)"
+    (yearSelected)="datepicker._selectYear($event)"
+    (monthSelected)="datepicker._selectMonth($event)">
+</calendar>
+</div>
+
+<!--
+  [selected]="datepicker._selected"
+    (_userSelection)="datepicker.close()" -->
