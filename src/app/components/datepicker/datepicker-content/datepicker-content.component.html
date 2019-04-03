@@ -7,10 +7,11 @@
     [minDate]="datepicker._minDate"
     [maxDate]="datepicker._maxDate"
     [dateFilter]="datepicker._dateFilter"
+    [selected]="datepicker._selecteds[0]"
     [headerComponent]="datepicker.calendarHeaderComponent"
     [dateClass]="datepicker.dateClass"
     [@fadeInCalendar]="'enter'"
-    (selectedChange)="selectedChange($event, calendar)"
+    (selectedChange)="selectedChange($event, calendar, 0)"
     (yearSelected)="datepicker._selectYear($event)"
     (monthSelected)="datepicker._selectMonth($event)">
 </calendar>
@@ -22,10 +23,11 @@
     [minDate]="datepicker._minDate"
     [maxDate]="datepicker._maxDate"
     [dateFilter]="datepicker._dateFilter"
+    [selected]="datepicker._selecteds[1]"
     [headerComponent]="datepicker.calendarHeaderComponent"
     [dateClass]="datepicker.dateClass"
     [@fadeInCalendar]="'enter'"
-    (selectedChange)="selectedChange($event, calendar2)"
+    (selectedChange)="selectedChange($event, calendar2, 1)"
     (yearSelected)="datepicker._selectYear($event)"
     (monthSelected)="datepicker._selectMonth($event)">
 </calendar>

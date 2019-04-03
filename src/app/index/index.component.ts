@@ -1,5 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Platform } from '@angular/cdk/platform';
+import { Moment } from 'moment';
 
 @Component({
   selector: 'app-index',
@@ -20,11 +21,12 @@ export class IndexComponent implements OnInit {
   value
 
   date1 = '2019-04-01'
+  date2 = ['2019-04-01', '2019-04-02']
 
   startView: 'month' | 'year' | 'multi-year' = 'month'
 
-  myFilter = (d: Date): boolean => {
-    const day = d.getDay();
+  myFilter = (d: Moment): boolean => {
+    const day = d.day();
     return day !== 0 && day !== 6;
   }
 

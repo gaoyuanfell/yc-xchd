@@ -12,6 +12,7 @@ import { filter, take } from 'rxjs/operators';
 import { CalendarComponent } from '../calendar/calendar.component';
 import { createMissingDateImplError } from '../datepicker-errors';
 import { DatepickerInputDirective } from '../datepicker-input';
+import { Moment } from 'moment';
 
 /** Used to generate a unique ID for each datepicker instance. */
 let datepickerUid = 0;
@@ -78,18 +79,18 @@ implements AfterViewInit, CanColor {
   /** Whether the datepicker is above or below the input. */
   _isAbove: boolean;
 
-  selectedChange(event, calendar){
+  selectedChange(event, calendar, index){
     let _selecteds = this.datepicker._selecteds
-    if(_selecteds.length == 2){
+    if(_selecteds.filter(d => d).length == 2){
       _selecteds.length = 0
       this._calendars.forEach(item => {
         item.selected = undefined;
       })
     }
-    if(!calendar.selected) _selecteds.push(event)
+    if(!calendar.selected) _selecteds[index] = event
     calendar.selected = event
-    if(_selecteds.length == 2){
-      this.datepicker.select(_selecteds)
+    if(_selecteds.filter(d => d).length == 2){
+      this.datepicker.select(_selecteds.sort((a:any,b:any) => a.valueOf() - b.valueOf()))
     }
   }
 
@@ -106,7 +107,7 @@ implements AfterViewInit, CanColor {
 @Component({
   selector: 'datepicker',
   template: '',
-  exportAs: 'matDatepicker',
+  exportAs: 'datepicker',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })
@@ -121,7 +122,7 @@ export class DatepickerComponent<D> implements OnDestroy, CanColor {
   get startAt(): D | null {
     // If an explicit startAt is set we start there, otherwise we start at whatever the currently
     // selected value is.
-    return this._startAt || (this._datepickerInput ? this._datepickerInput.value : null);
+    return this._startAt || (this._datepickerInput ? this._datepickerInput.value?this._datepickerInput.value[0] : null:null);
   }
   set startAt(value: D | null) {
     this._startAt = this._getValidDateOrNull(this._dateAdapter.deserialize(value));
@@ -169,6 +170,16 @@ export class DatepickerComponent<D> implements OnDestroy, CanColor {
   }
   private _disabled: boolean;
 
+  // 获取对方的时间控件
+  @Input()
+  get calendar(): DatepickerComponent<D> {
+    return this._calendar
+  }
+  set calendar(val: DatepickerComponent<D>){
+    this._calendar = val
+  }
+  private _calendar
+
   /**
    * Emits selected year in multiyear view.
    * This doesn't imply a change on the selected date.
@@ -210,7 +221,10 @@ export class DatepickerComponent<D> implements OnDestroy, CanColor {
 
   /** The currently selected date. */
   get _selecteds(): D[] | null { return this._validSelecteds; }
-  set _selecteds(value: D[] | null) { this._validSelecteds = value; }
+  set _selecteds(value: D[] | null) {
+    this._datepickerInput
+    this._validSelecteds = value;
+  }
   private _validSelecteds: D[] | null = [];
 
   /** The minimum selectable date. */
@@ -252,7 +266,7 @@ export class DatepickerComponent<D> implements OnDestroy, CanColor {
   readonly _disabledChange = new Subject<boolean>();
 
   /** Emits new selected date when selected date changes. */
-  readonly _selectedChanged = new Subject<D | D[]>();
+  readonly _selectedChanged = new Subject<D[]>();
 
   constructor(private _dialog: MatDialog,
               private _overlay: Overlay,
@@ -281,17 +295,10 @@ export class DatepickerComponent<D> implements OnDestroy, CanColor {
   }
 
   /** Selects the given date */
-  select(date: D | D[]): void {
-    if(date instanceof Array){
-      this._selectedChanged.next(this._selecteds);
-      this.close()
-    }else{
-      let oldValue = this._selected;
-      this._selected = date;
-      if (!this._dateAdapter.sameDate(oldValue, this._selected)) {
-        this._selectedChanged.next(date);
-      }
-    }
+  select(date: D[]): void {
+    this._selecteds = date;
+    this._selectedChanged.next(this._selecteds);
+    this.close()
   }
 
   /** Emits the selected year in multiyear view */
@@ -314,7 +321,7 @@ export class DatepickerComponent<D> implements OnDestroy, CanColor {
     }
     this._datepickerInput = input;
     this._inputSubscription =
-        this._datepickerInput._valueChange.subscribe((value: D | null) => this._selected = value);
+        this._datepickerInput._valueChange.subscribe((value: D[]) => this._selecteds = value);
   }
 
   /** Open the calendar. */
@@ -330,6 +337,9 @@ export class DatepickerComponent<D> implements OnDestroy, CanColor {
     }
 
     this.touchUi ? this._openAsDialog() : this._openAsPopup();
+
+
+
     this._opened = true;
     this.openedStream.emit();
   }

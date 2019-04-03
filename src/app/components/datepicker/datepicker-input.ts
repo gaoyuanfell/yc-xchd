@@ -6,35 +6,17 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {coerceBooleanProperty} from '@angular/cdk/coercion';
-import {DOWN_ARROW} from '@angular/cdk/keycodes';
-import {
-  Directive,
-  ElementRef,
-  EventEmitter,
-  forwardRef,
-  Inject,
-  Input,
-  OnDestroy,
-  Optional,
-  Output,
-} from '@angular/core';
-import {
-  AbstractControl,
-  ControlValueAccessor,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  ValidationErrors,
-  Validator,
-  ValidatorFn,
-  Validators,
-} from '@angular/forms';
-import {DateAdapter, MAT_DATE_FORMATS, MatDateFormats, ThemePalette} from '@angular/material/core';
-import {MatFormField} from '@angular/material/form-field';
-import {MAT_INPUT_VALUE_ACCESSOR} from '@angular/material/input';
-import {Subscription} from 'rxjs';
-import {createMissingDateImplError} from './datepicker-errors';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import { DOWN_ARROW } from '@angular/cdk/keycodes';
+import { Directive, ElementRef, EventEmitter, forwardRef, Inject, Input, OnDestroy, Optional, Output } from '@angular/core';
+import { AbstractControl, ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator, ValidatorFn, Validators } from '@angular/forms';
+import { DateAdapter, MatDateFormats, MAT_DATE_FORMATS, ThemePalette } from '@angular/material/core';
+import { MatFormField } from '@angular/material/form-field';
+import { MAT_INPUT_VALUE_ACCESSOR } from '@angular/material/input';
+import { Subscription } from 'rxjs';
 import { DatepickerComponent } from './datepicker-content/datepicker-content.component';
+import { createMissingDateImplError } from './datepicker-errors';
+import * as moment from 'moment'
 
 /** @docs-private */
 export const MAT_DATEPICKER_VALUE_ACCESSOR: any = {
@@ -58,7 +40,7 @@ export const MAT_DATEPICKER_VALIDATORS: any = {
  */
 export class MatDatepickerInputEvent<D> {
   /** The new value for the target datepicker input. */
-  value: D | null;
+  value: D[] | null;
 
   constructor(
     /** Reference to the datepicker input component that emitted the event. */
@@ -72,7 +54,7 @@ export class MatDatepickerInputEvent<D> {
 
 /** Directive used to connect an input to a MatDatepicker. */
 @Directive({
-  selector: 'input[datepickerInput]',
+  selector: 'input[datepicker]',
   providers: [
     MAT_DATEPICKER_VALUE_ACCESSOR,
     MAT_DATEPICKER_VALIDATORS,
@@ -94,7 +76,7 @@ export class MatDatepickerInputEvent<D> {
 export class DatepickerInputDirective<D> implements ControlValueAccessor, OnDestroy, Validator {
   /** The datepicker that this input is associated with. */
   @Input()
-  set matDatepicker(value: DatepickerComponent<D>) {
+  set datepicker(value: DatepickerComponent<D>) {
     if (!value) {
       return;
     }
@@ -103,8 +85,7 @@ export class DatepickerInputDirective<D> implements ControlValueAccessor, OnDest
     this._datepicker._registerInput(this);
     this._datepickerSubscription.unsubscribe();
 
-    this._datepickerSubscription = this._datepicker._selectedChanged.subscribe((selected: D) => {
-      console.info(selected)
+    this._datepickerSubscription = this._datepicker._selectedChanged.subscribe((selected: D[]) => {
       this.value = selected;
       this._cvaOnChange(selected);
       this._onTouched();
@@ -124,20 +105,22 @@ export class DatepickerInputDirective<D> implements ControlValueAccessor, OnDest
 
   /** The value of the input. */
   @Input()
-  get value(): D | null { return this._value; }
-  set value(value: D | null) {
-    value = this._dateAdapter.deserialize(value);
-    this._lastValueValid = !value || this._dateAdapter.isValid(value);
-    value = this._getValidDateOrNull(value);
-    const oldDate = this.value;
-    this._value = value;
-    this._formatValue(value);
+  get value(): D[] | null { return this._value; }
+  set value(value: D[] | null) {
+    if(value instanceof Array){
 
-    if (!this._dateAdapter.sameDate(oldDate, value)) {
+      for (let index = 0; index < value.length; index++) {
+        const element = value[index];
+        this._lastValueValid = !element || this._dateAdapter.isValid(element);
+        if(!this._lastValueValid) break;
+      }
+
+      let v = value.map(v => this._dateAdapter.format(v, 'YYYY-MM-DD')).join(' ~ ')
+      this._formatValue(v);
       this._valueChange.emit(value);
     }
   }
-  private _value: D | null;
+  private _value: D[] | null;
 
   /** The minimum valid date. */
   @Input()
@@ -188,7 +171,7 @@ export class DatepickerInputDirective<D> implements ControlValueAccessor, OnDest
       new EventEmitter<MatDatepickerInputEvent<D>>();
 
   /** Emits when the value changes (either due to user input or programmatic change). */
-  _valueChange = new EventEmitter<D | null>();
+  _valueChange = new EventEmitter<D[]>();
 
   /** Emits when the disabled state has changed */
   _disabledChange = new EventEmitter<boolean>();
@@ -211,6 +194,7 @@ export class DatepickerInputDirective<D> implements ControlValueAccessor, OnDest
 
   /** The form control validator for the min date. */
   private _minValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    console.info(control)
     const controlValue = this._getValidDateOrNull(this._dateAdapter.deserialize(control.value));
     return (!this.min || !controlValue ||
         this._dateAdapter.compareDate(this.min, controlValue) <= 0) ?
@@ -219,6 +203,7 @@ export class DatepickerInputDirective<D> implements ControlValueAccessor, OnDest
 
   /** The form control validator for the max date. */
   private _maxValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    console.info(control)
     const controlValue = this._getValidDateOrNull(this._dateAdapter.deserialize(control.value));
     return (!this.max || !controlValue ||
         this._dateAdapter.compareDate(this.max, controlValue) >= 0) ?
@@ -227,6 +212,7 @@ export class DatepickerInputDirective<D> implements ControlValueAccessor, OnDest
 
   /** The form control validator for the date filter. */
   private _filterValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    console.info(control)
     const controlValue = this._getValidDateOrNull(this._dateAdapter.deserialize(control.value));
     return !this._dateFilter || !controlValue || this._dateFilter(controlValue) ?
         null : {'matDatepickerFilter': true};
@@ -292,7 +278,10 @@ export class DatepickerInputDirective<D> implements ControlValueAccessor, OnDest
   }
 
   // Implemented as part of ControlValueAccessor.
-  writeValue(value: D): void {
+  writeValue(value: D[]): void {
+    if(value instanceof Array){
+      value = value.map<any>(v => moment(v))
+    }
     this.value = value;
   }
 
@@ -321,18 +310,7 @@ export class DatepickerInputDirective<D> implements ControlValueAccessor, OnDest
   }
 
   _onInput(value: string) {
-    let date = this._dateAdapter.parse(value, this._dateFormats.parse.dateInput);
-    this._lastValueValid = !date || this._dateAdapter.isValid(date);
-    date = this._getValidDateOrNull(date);
 
-    if (!this._dateAdapter.sameDate(date, this._value)) {
-      this._value = date;
-      this._cvaOnChange(date);
-      this._valueChange.emit(date);
-      this.dateInput.emit(new MatDatepickerInputEvent(this, this._elementRef.nativeElement));
-    } else {
-      this._validatorOnChange();
-    }
   }
 
   _onChange() {
@@ -348,16 +326,15 @@ export class DatepickerInputDirective<D> implements ControlValueAccessor, OnDest
   _onBlur() {
     // Reformat the input only if we have a valid value.
     if (this.value) {
-      this._formatValue(this.value);
+      // this._formatValue(this.value);
     }
 
     this._onTouched();
   }
 
   /** Formats a value and sets it on the input element. */
-  private _formatValue(value: D | null) {
-    this._elementRef.nativeElement.value =
-        value ? this._dateAdapter.format(value, this._dateFormats.display.dateInput) : '';
+  private _formatValue(value: string) {
+    this._elementRef.nativeElement.value = value || ''
   }
 
   /**
