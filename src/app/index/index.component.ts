@@ -23,6 +23,11 @@ export class IndexComponent implements OnInit {
   date1 = '2019-04-01'
   date2 = ['2019-04-01', '2019-04-02']
 
+  query = {
+    startDate:'2019-04-01',
+    endDate: '2019-04-02'
+  }
+
   startView: 'month' | 'year' | 'multi-year' = 'month'
 
   myFilter = (d: Moment): boolean => {

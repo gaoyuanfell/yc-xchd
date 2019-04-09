@@ -82,7 +82,7 @@ implements AfterViewInit, CanColor {
   selectedChange(event, calendar, index){
     let _selecteds = this.datepicker._selecteds
     if(_selecteds.filter(d => d).length == 2){
-      _selecteds.length = 0
+      this.datepicker._selecteds = _selecteds = []
       this._calendars.forEach(item => {
         item.selected = undefined;
       })

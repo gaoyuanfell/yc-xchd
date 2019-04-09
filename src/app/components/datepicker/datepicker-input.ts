@@ -58,7 +58,7 @@ export class MatDatepickerInputEvent<D> {
   providers: [
     MAT_DATEPICKER_VALUE_ACCESSOR,
     MAT_DATEPICKER_VALIDATORS,
-    {provide: MAT_INPUT_VALUE_ACCESSOR, useExisting: DatepickerInputDirective},
+    { provide: MAT_INPUT_VALUE_ACCESSOR, useExisting: DatepickerInputDirective },
   ],
   host: {
     '[attr.aria-haspopup]': 'true',
@@ -87,7 +87,7 @@ export class DatepickerInputDirective<D> implements ControlValueAccessor, OnDest
 
     this._datepickerSubscription = this._datepicker._selectedChanged.subscribe((selected: D[]) => {
       this.value = selected;
-      this._cvaOnChange(selected);
+      this._cvaOnChange(selected.map(v => this._dateAdapter.format(v, 'YYYY-MM-DD')));
       this._onTouched();
       this.dateInput.emit(new MatDatepickerInputEvent(this, this._elementRef.nativeElement));
       this.dateChange.emit(new MatDatepickerInputEvent(this, this._elementRef.nativeElement));
@@ -107,17 +107,25 @@ export class DatepickerInputDirective<D> implements ControlValueAccessor, OnDest
   @Input()
   get value(): D[] | null { return this._value; }
   set value(value: D[] | null) {
-    if(value instanceof Array){
+    if (value instanceof Array) {
 
       for (let index = 0; index < value.length; index++) {
         const element = value[index];
         this._lastValueValid = !element || this._dateAdapter.isValid(element);
-        if(!this._lastValueValid) break;
+        if (!this._lastValueValid) break;
       }
 
       let v = value.map(v => this._dateAdapter.format(v, 'YYYY-MM-DD')).join(' ~ ')
       this._formatValue(v);
       this._valueChange.emit(value);
+    }
+
+    if (this.query) {
+      let target = this.query.target;
+      let keys = this.query.keys;
+      keys.forEach((element, index) => {
+        target[element] = value[index]
+      });
     }
   }
   private _value: D[] | null;
@@ -162,13 +170,28 @@ export class DatepickerInputDirective<D> implements ControlValueAccessor, OnDest
   }
   private _disabled: boolean;
 
+  /** query {target: {}, keys:[startDate, endDate]}*/
+  @Input()
+  get query() {
+    return this.query;
+  }
+  set query(val) {
+    this._query = val;
+    if(this._query){
+      let target = this._query.target;
+      let keys = this._query.keys;
+      this.value = keys.map(key => target[key]).filter(date => date).map(v => moment(v))
+    }
+  }
+  private _query
+
   /** Emits when a `change` event is fired on this `<input>`. */
   @Output() readonly dateChange: EventEmitter<MatDatepickerInputEvent<D>> =
-      new EventEmitter<MatDatepickerInputEvent<D>>();
+    new EventEmitter<MatDatepickerInputEvent<D>>();
 
   /** Emits when an `input` event is fired on this `<input>`. */
   @Output() readonly dateInput: EventEmitter<MatDatepickerInputEvent<D>> =
-      new EventEmitter<MatDatepickerInputEvent<D>>();
+    new EventEmitter<MatDatepickerInputEvent<D>>();
 
   /** Emits when the value changes (either due to user input or programmatic change). */
   _valueChange = new EventEmitter<D[]>();
@@ -176,11 +199,11 @@ export class DatepickerInputDirective<D> implements ControlValueAccessor, OnDest
   /** Emits when the disabled state has changed */
   _disabledChange = new EventEmitter<boolean>();
 
-  _onTouched = () => {};
+  _onTouched = () => { };
 
-  private _cvaOnChange: (value: any) => void = () => {};
+  private _cvaOnChange: (value: any) => void = () => { };
 
-  private _validatorOnChange = () => {};
+  private _validatorOnChange = () => { };
 
   private _datepickerSubscription = Subscription.EMPTY;
 
@@ -189,7 +212,7 @@ export class DatepickerInputDirective<D> implements ControlValueAccessor, OnDest
   /** The form control validator for whether the input parses. */
   private _parseValidator: ValidatorFn = (): ValidationErrors | null => {
     return this._lastValueValid ?
-        null : {'matDatepickerParse': {'text': this._elementRef.nativeElement.value}};
+      null : { 'matDatepickerParse': { 'text': this._elementRef.nativeElement.value } };
   }
 
   /** The form control validator for the min date. */
@@ -197,8 +220,8 @@ export class DatepickerInputDirective<D> implements ControlValueAccessor, OnDest
     console.info(control)
     const controlValue = this._getValidDateOrNull(this._dateAdapter.deserialize(control.value));
     return (!this.min || !controlValue ||
-        this._dateAdapter.compareDate(this.min, controlValue) <= 0) ?
-        null : {'matDatepickerMin': {'min': this.min, 'actual': controlValue}};
+      this._dateAdapter.compareDate(this.min, controlValue) <= 0) ?
+      null : { 'matDatepickerMin': { 'min': this.min, 'actual': controlValue } };
   }
 
   /** The form control validator for the max date. */
@@ -206,8 +229,8 @@ export class DatepickerInputDirective<D> implements ControlValueAccessor, OnDest
     console.info(control)
     const controlValue = this._getValidDateOrNull(this._dateAdapter.deserialize(control.value));
     return (!this.max || !controlValue ||
-        this._dateAdapter.compareDate(this.max, controlValue) >= 0) ?
-        null : {'matDatepickerMax': {'max': this.max, 'actual': controlValue}};
+      this._dateAdapter.compareDate(this.max, controlValue) >= 0) ?
+      null : { 'matDatepickerMax': { 'max': this.max, 'actual': controlValue } };
   }
 
   /** The form control validator for the date filter. */
@@ -215,22 +238,22 @@ export class DatepickerInputDirective<D> implements ControlValueAccessor, OnDest
     console.info(control)
     const controlValue = this._getValidDateOrNull(this._dateAdapter.deserialize(control.value));
     return !this._dateFilter || !controlValue || this._dateFilter(controlValue) ?
-        null : {'matDatepickerFilter': true};
+      null : { 'matDatepickerFilter': true };
   }
 
   /** The combined form control validator for this input. */
   private _validator: ValidatorFn | null =
-      Validators.compose(
-          [this._parseValidator, this._minValidator, this._maxValidator, this._filterValidator]);
+    Validators.compose(
+      [this._parseValidator, this._minValidator, this._maxValidator, this._filterValidator]);
 
   /** Whether the last value set on the input was valid. */
   private _lastValueValid = false;
 
   constructor(
-      private _elementRef: ElementRef<HTMLInputElement>,
-      @Optional() public _dateAdapter: DateAdapter<D>,
-      @Optional() @Inject(MAT_DATE_FORMATS) private _dateFormats: MatDateFormats,
-      @Optional() private _formField: MatFormField) {
+    private _elementRef: ElementRef<HTMLInputElement>,
+    @Optional() public _dateAdapter: DateAdapter<D>,
+    @Optional() @Inject(MAT_DATE_FORMATS) private _dateFormats: MatDateFormats,
+    @Optional() private _formField: MatFormField) {
     if (!this._dateAdapter) {
       throw createMissingDateImplError('DateAdapter');
     }
@@ -279,7 +302,7 @@ export class DatepickerInputDirective<D> implements ControlValueAccessor, OnDest
 
   // Implemented as part of ControlValueAccessor.
   writeValue(value: D[]): void {
-    if(value instanceof Array){
+    if (value instanceof Array) {
       value = value.map<any>(v => moment(v))
     }
     this.value = value;
